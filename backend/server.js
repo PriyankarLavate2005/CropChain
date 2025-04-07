@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const app = express();
 const PORT = process.env.PORT || 5000;
 const cors = require('cors');
-
+const orderRoutes =require('./routes/orderRoutes')
 const connectDB = require('./config/DB');
 mongoose.connect('mongodb://localhost/fruitvegmarke',
 {
@@ -18,6 +18,7 @@ app.use(express.json());
 app.use(cors()); // Use the cors middleware
 
 app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/orders', orderRoutes);
 
 const productSchema = new mongoose.Schema({
 name: String,

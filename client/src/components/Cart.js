@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { FaTrash, FaCheckCircle } from 'react-icons/fa';
 import './Cart.css';
 
-const Cart = ({ cartItems, onRemoveItem, onClose, totalPrice }) => {
+const Cart = ({ cartItems, onRemoveItem, onClose, totalPrice, userId }) => {
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
     address: '',
@@ -19,21 +21,69 @@ const Cart = ({ cartItems, onRemoveItem, onClose, totalPrice }) => {
     });
   };
 
-  const handleSubmitOrder = (e) => {
-    e.preventDefault();
-    console.log('Order submitted:', { items: cartItems, ...formData });
+const handleSubmitOrder = async (e) => {
+  e.preventDefault();
+  setIsLoading(true);
+  
+  try {
+    const orderData = {
+      userId: userId, // Make sure to pass userId from props or state
+      items: cartItems.map(item => ({
+        productId: item._id,
+        name: item.name,
+        price: item.price,
+        quantity: 1,
+        image: item.image
+      })),
+      totalAmount: totalPrice + 5, // Include delivery
+      deliveryInfo: formData
+    };
+
+    const response = await fetch('http://localhost:5000/api/orders', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(orderData),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to place order');
+    }
+
     setOrderPlaced(true);
     setTimeout(() => {
       onClose();
+      // Optionally clear cart here
     }, 3000);
-  };
+    
+  } catch (error) {
+    console.error('Error placing order:', error);
+    setError(error.message || 'Failed to place order. Please try again.');
+  } finally {
+    setIsLoading(false);
+  }
+};;
 
   if (orderPlaced) {
     return (
       <div className="order-success">
-        <FaCheckCircle className="success-icon" />
+        <div className="success-animation">
+          <FaCheckCircle className="success-icon" />
+          <svg className="checkmark" viewBox="0 0 52 52">
+            <circle className="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+            <path className="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+          </svg>
+        </div>
         <h2>Order Placed Successfully!</h2>
-        <p>Thank you for your purchase.</p>
+        <p>Thank you for your purchase. Your order is being processed.</p>
+        <button 
+          className="continue-shopping" 
+          onClick={onClose}
+          style={{ marginTop: '20px' }}
+        >
+          Continue Shopping
+        </button>
       </div>
     );
   }
@@ -44,6 +94,8 @@ const Cart = ({ cartItems, onRemoveItem, onClose, totalPrice }) => {
         <h2>Your Shopping Cart</h2>
         <button className="close-btn" onClick={onClose}>×</button>
       </div>
+
+      {error && <div className="error-message">{error}</div>}
 
       {cartItems.length === 0 ? (
         <div className="empty-cart">
@@ -125,13 +177,18 @@ const Cart = ({ cartItems, onRemoveItem, onClose, totalPrice }) => {
                 name="payment"
                 value={formData.payment}
                 onChange={handleInputChange}
+                required
               >
                 <option value="cash">Cash on Delivery</option>
                 <option value="card">Credit Card</option>
               </select>
             </div>
-            <button type="submit" className="place-order-btn">
-              Place Order
+            <button 
+              type="submit" 
+              className="place-order-btn"
+              disabled={isLoading}
+            >
+              {isLoading ? 'Processing...' : 'Place Order'}
             </button>
           </form>
         </>
