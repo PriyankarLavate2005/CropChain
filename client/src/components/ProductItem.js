@@ -30,11 +30,11 @@ const ProductItem = ({ product }) => {
 				<p style={{ fontWeight: "500" }}>
 					Price: {product.price} Rs/Kg
 				</p>
-				<button onClick={
+				{/* {/* <button onClick={
 					() => handleAddToCart(product)
-				}>
-					Add to Cart
-				</button>
+				}> 
+			
+				</button> */}
 				<button onClick={
 					() =>
 						handleRemoveToCart(product)

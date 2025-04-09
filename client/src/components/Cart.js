@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
-import { FaTrash, FaCheckCircle } from 'react-icons/fa';
+import { FaTrash, FaCheckCircle, FaTimes, FaSpinner, FaShoppingBag, FaTruck, FaMoneyBillWave, FaCreditCard } from 'react-icons/fa';
 import './Cart.css';
 
-const Cart = ({ cartItems, onRemoveItem, onClose, totalPrice, userId }) => {
-  const [orderPlaced, setOrderPlaced] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+const Cart = ({ cartItems, onRemoveItem, onClose, totalPrice, clearCart }) => {
+  const [showSuccessBar, setShowSuccessBar] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
     address: '',
     phone: '',
-    payment: 'cash'
+    payment: 'cash',
+    email: ''
   });
 
   const handleInputChange = (e) => {
@@ -21,177 +22,253 @@ const Cart = ({ cartItems, onRemoveItem, onClose, totalPrice, userId }) => {
     });
   };
 
-const handleSubmitOrder = async (e) => {
-  e.preventDefault();
-  setIsLoading(true);
-  
-  try {
-    const orderData = {
-      userId: userId, // Make sure to pass userId from props or state
-      items: cartItems.map(item => ({
-        productId: item._id,
-        name: item.name,
-        price: item.price,
-        quantity: 1,
-        image: item.image
-      })),
-      totalAmount: totalPrice + 5, // Include delivery
-      deliveryInfo: formData
-    };
-
-    const response = await fetch('http://localhost:5000/api/orders', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(orderData),
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to place order');
+  const handleSubmitOrder = (e) => {
+    e.preventDefault();
+    
+    // Validate form
+    if (!formData.name || !formData.address || !formData.phone || !formData.email) {
+      setError('Please fill in all required fields');
+      return;
     }
 
-    setOrderPlaced(true);
-    setTimeout(() => {
-      onClose();
-      // Optionally clear cart here
-    }, 3000);
-    
-  } catch (error) {
-    console.error('Error placing order:', error);
-    setError(error.message || 'Failed to place order. Please try again.');
-  } finally {
-    setIsLoading(false);
-  }
-};;
+    const phoneRegex = /^[0-9]{10,15}$/;
+    if (!phoneRegex.test(formData.phone)) {
+      setError('Please enter a valid phone number');
+      return;
+    }
 
-  if (orderPlaced) {
-    return (
-      <div className="order-success">
-        <div className="success-animation">
-          <FaCheckCircle className="success-icon" />
-          <svg className="checkmark" viewBox="0 0 52 52">
-            <circle className="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
-            <path className="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
-          </svg>
-        </div>
-        <h2>Order Placed Successfully!</h2>
-        <p>Thank you for your purchase. Your order is being processed.</p>
-        <button 
-          className="continue-shopping" 
-          onClick={onClose}
-          style={{ marginTop: '20px' }}
-        >
-          Continue Shopping
-        </button>
-      </div>
-    );
-  }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError('Please enter a valid email address');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setError(null);
+
+    // Simulate order submission
+    setTimeout(() => {
+      console.log('Order submitted:', {
+        customer: formData,
+        items: cartItems,
+        total: totalPrice + 5
+      });
+
+      setShowSuccessBar(true);
+      clearCart();
+      
+      setTimeout(() => {
+        setShowSuccessBar(false);
+        onClose();
+      }, 5000);
+      
+      setIsSubmitting(false);
+    }, 1500);
+  };
+
+  const closeSuccessBar = () => {
+    setShowSuccessBar(false);
+    onClose();
+  };
 
   return (
     <div className="cart-container">
+      {/* Success Notification */}
+      {showSuccessBar && (
+        <div className="success-notification slide-in">
+          <div className="success-content">
+            <FaCheckCircle className="success-icon bounce" />
+            <div>
+              <h3>Order Confirmed!</h3>
+              <p>Your order has been placed successfully.</p>
+            </div>
+          </div>
+          <button className="close-notification" onClick={closeSuccessBar}>
+            <FaTimes />
+          </button>
+        </div>
+      )}
+
       <div className="cart-header">
-        <h2>Your Shopping Cart</h2>
+        <div className="cart-title">
+          <FaShoppingBag className="cart-icon" />
+          <h2>Your Shopping Cart</h2>
+        </div>
         <button className="close-btn" onClick={onClose}>×</button>
       </div>
 
-      {error && <div className="error-message">{error}</div>}
-
       {cartItems.length === 0 ? (
         <div className="empty-cart">
-          <p>Your cart is empty</p>
-          <button className="continue-shopping" onClick={onClose}>
+          <div className="empty-cart-icon">
+            <FaShoppingBag />
+          </div>
+          <h3>Your cart is empty</h3>
+          <p>Looks like you haven't added anything to your cart yet</p>
+          <button className="continue-shopping-btn" onClick={onClose}>
             Continue Shopping
           </button>
         </div>
       ) : (
-        <>
-          <div className="cart-items">
-            {cartItems.map((item, index) => (
-              <div key={index} className="cart-item">
-                <img src={item.image} alt={item.name} className="cart-item-image" />
-                <div className="cart-item-details">
-                  <h3>{item.name}</h3>
-                  <p>${item.price?.toFixed(2)}</p>
+        <div className="cart-content">
+          <div className="cart-items-container">
+            <div className="cart-items-header">
+              <h3>Items ({cartItems.length})</h3>
+            </div>
+            <div className="cart-items">
+              {cartItems.map((item, index) => (
+                <div key={index} className="cart-item-card">
+                  <div className="cart-item-image-container">
+                    <img src={item.image} alt={item.name} className="cart-item-image" />
+                  </div>
+                  <div className="cart-item-details">
+                    <h3>{item.name}</h3>
+                    <p className="item-price">${item.price.toFixed(2)}</p>
+                    {item.quantity > 1 && (
+                      <p className="item-quantity">Quantity: {item.quantity}</p>
+                    )}
+                  </div>
+                  <button 
+                    className="remove-item-btn"
+                    onClick={() => onRemoveItem(item)}
+                    disabled={isSubmitting}
+                    aria-label="Remove item"
+                  >
+                    <FaTrash />
+                  </button>
                 </div>
-                <button 
-                  className="remove-item"
-                  onClick={() => onRemoveItem(item)}
-                >
-                  <FaTrash />
-                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="checkout-section">
+            <div className="order-summary-card">
+              <h3 className="summary-title">
+                <FaTruck className="summary-icon" /> Order Summary
+              </h3>
+              <div className="summary-row">
+                <span>Subtotal:</span>
+                <span>${totalPrice.toFixed(2)}</span>
               </div>
-            ))}
-          </div>
+              <div className="summary-row">
+                <span>Delivery:</span>
+                <span>$5.00</span>
+              </div>
+              <div className="summary-row total">
+                <span>Total:</span>
+                <span>${(totalPrice + 5).toFixed(2)}</span>
+              </div>
+            </div>
 
-          <div className="cart-summary">
-            <h3>Order Summary</h3>
-            <div className="summary-row">
-              <span>Subtotal:</span>
-              <span>${totalPrice.toFixed(2)}</span>
-            </div>
-            <div className="summary-row">
-              <span>Delivery:</span>
-              <span>$5.00</span>
-            </div>
-            <div className="summary-row total">
-              <span>Total:</span>
-              <span>${(totalPrice + 5).toFixed(2)}</span>
-            </div>
-          </div>
-
-          <form className="checkout-form" onSubmit={handleSubmitOrder}>
-            <h3>Delivery Information</h3>
-            <div className="form-group">
-              <label>Full Name</label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label>Address</label>
-              <textarea
-                name="address"
-                value={formData.address}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label>Phone Number</label>
-              <input
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label>Payment Method</label>
-              <select
-                name="payment"
-                value={formData.payment}
-                onChange={handleInputChange}
-                required
+            <form className="checkout-form" onSubmit={handleSubmitOrder}>
+              <h3 className="form-title">Delivery Information</h3>
+              
+              {error && (
+                <div className="error-message">
+                  <FaTimes className="error-icon" /> {error}
+                </div>
+              )}
+              
+              <div className="form-group">
+                <label>Full Name *</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  required
+                  disabled={isSubmitting}
+                  placeholder="John Doe"
+                />
+              </div>
+              <div className="form-group">
+                <label>Email *</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  required
+                  disabled={isSubmitting}
+                  placeholder="your@email.com"
+                />
+              </div>
+              <div className="form-group">
+                <label>Phone Number *</label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  required
+                  disabled={isSubmitting}
+                  placeholder="1234567890"
+                />
+              </div>
+              <div className="form-group">
+                <label>Address *</label>
+                <textarea
+                  name="address"
+                  value={formData.address}
+                  onChange={handleInputChange}
+                  required
+                  disabled={isSubmitting}
+                  placeholder="Your full delivery address"
+                  rows="3"
+                />
+              </div>
+              
+              <div className="payment-methods">
+                <h4>Payment Method</h4>
+                <div className="payment-options">
+                  <label className={`payment-option ${formData.payment === 'cash' ? 'active' : ''}`}>
+                    <input
+                      type="radio"
+                      name="payment"
+                      value="cash"
+                      checked={formData.payment === 'cash'}
+                      onChange={handleInputChange}
+                      disabled={isSubmitting}
+                    />
+                    <div className="payment-content">
+                      <FaMoneyBillWave className="payment-icon" />
+                      <span>Cash on Delivery</span>
+                    </div>
+                  </label>
+                  <label className={`payment-option ${formData.payment === 'card' ? 'active' : ''}`}>
+                    <input
+                      type="radio"
+                      name="payment"
+                      value="card"
+                      checked={formData.payment === 'card'}
+                      onChange={handleInputChange}
+                      disabled={isSubmitting}
+                    />
+                    <div className="payment-content">
+                      <FaCreditCard className="payment-icon" />
+                      <span>Credit Card</span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+              
+              <button 
+                type="submit" 
+                className="place-order-btn"
+                disabled={isSubmitting}
               >
-                <option value="cash">Cash on Delivery</option>
-                <option value="card">Credit Card</option>
-              </select>
-            </div>
-            <button 
-              type="submit" 
-              className="place-order-btn"
-              disabled={isLoading}
-            >
-              {isLoading ? 'Processing...' : 'Place Order'}
-            </button>
-          </form>
-        </>
+                {isSubmitting ? (
+                  <>
+                    <FaSpinner className="spinner" /> Processing...
+                  </>
+                ) : (
+                  <>
+                    Place Order · ${(totalPrice + 5).toFixed(2)}
+                  </>
+                )}
+              </button>
+            </form>
+          </div>
+        </div>
       )}
     </div>
   );
