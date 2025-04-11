@@ -12,7 +12,7 @@ import CropInfo from '../CropInfo/CropInfo.js';
 import Login from '../pages/Login.js';
 import PrivateCompenents from '../components/Privatecomponent.js';
 import Products from '../pages/Products.js';
-
+import MyProfile from '../pages/UserProfile.js';
 const AppRoutes = () => {
   return (
     <>
@@ -23,6 +23,8 @@ const AppRoutes = () => {
           <Route path="/contact" element={<Contact />} />
           <Route path="/logout" element={<Logout/>} />
           <Route path="/products" element={<Products/>} />
+          <Route path="/userprofile" element={<MyProfile/>} />
+
         </Route>
         <Route path='/cropInfo' element={<CropInfo />} />
         <Route path="/" element={<Home />} />
