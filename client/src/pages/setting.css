@@ -1,0 +1,308 @@
+/* Settings Page Styles */
+.settings-container {
+    font-family: 'Poppins', sans-serif;
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    color: #333;
+  }
+  
+  .settings-header {
+    margin-bottom: 2.5rem;
+    text-align: center;
+  }
+  
+  .settings-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2c7a5a;
+    margin-bottom: 0.5rem;
+  }
+  
+  .settings-header p {
+    font-size: 1.1rem;
+    color: #666;
+  }
+  
+  .settings-content {
+    display: flex;
+    gap: 2rem;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+  }
+  
+  .settings-sidebar {
+    width: 280px;
+    background: linear-gradient(135deg, #2c7a5a 0%, #38a169 100%);
+    padding: 2rem 0;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    color: rgba(255, 255, 255, 0.9);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    font-weight: 500;
+    border-left: 4px solid transparent;
+  }
+  
+  .sidebar-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+  
+  .sidebar-item.active {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: white;
+    border-left: 4px solid white;
+    font-weight: 600;
+  }
+  
+  .sidebar-item .icon {
+    font-size: 1.2rem;
+    width: 24px;
+    text-align: center;
+  }
+  
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 1.5rem;
+  }
+  
+  .back-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+  }
+  
+  .back-link:hover {
+    color: white;
+  }
+  
+  .back-link .icon {
+    font-size: 1rem;
+  }
+  
+  .settings-main {
+    flex: 1;
+    padding: 2.5rem;
+  }
+  
+  .settings-section {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  .settings-section h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #2c7a5a;
+    margin-bottom: 0.5rem;
+  }
+  
+  .section-description {
+    color: #666;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #444;
+  }
+  
+  .form-control {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: #f9f9f9;
+  }
+  
+  .form-control:focus {
+    outline: none;
+    border-color: #38a169;
+    box-shadow: 0 0 0 3px rgba(56, 161, 105, 0.2);
+    background-color: white;
+  }
+  
+  .form-actions {
+    margin-top: 2rem;
+  }
+  
+  .save-btn {
+    background: linear-gradient(135deg, #2c7a5a 0%, #38a169 100%);
+    color: white;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(44, 122, 90, 0.3);
+  }
+  
+  .save-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(44, 122, 90, 0.4);
+  }
+  
+  .security-item, .notification-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+  }
+  
+  .security-info h3, .notification-info h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    color: #333;
+  }
+  
+  .security-info p, .notification-info p {
+    font-size: 0.9rem;
+    color: #666;
+  }
+  
+  /* Toggle Switch */
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+  }
+  
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+  }
+  
+  input:checked + .slider {
+    background-color: #38a169;
+  }
+  
+  input:checked + .slider:before {
+    transform: translateX(24px);
+  }
+  
+  .password-form {
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid #eee;
+  }
+  
+  .password-form h3 {
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+    color: #2c7a5a;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 992px) {
+    .settings-content {
+      flex-direction: column;
+    }
+    
+    .settings-sidebar {
+      width: 100%;
+      flex-direction: row;
+      padding: 1rem;
+      overflow-x: auto;
+    }
+    
+    .sidebar-item {
+      flex: 1;
+      min-width: max-content;
+      border-left: none;
+      border-bottom: 4px solid transparent;
+      justify-content: center;
+    }
+    
+    .sidebar-item.active {
+      border-left: none;
+      border-bottom: 4px solid white;
+    }
+    
+    .sidebar-footer {
+      display: none;
+    }
+    
+    .settings-main {
+      padding: 2rem;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .settings-header h1 {
+      font-size: 2rem;
+    }
+    
+    .settings-header p {
+      font-size: 1rem;
+    }
+    
+    .settings-section h2 {
+      font-size: 1.5rem;
+    }
+    
+    .security-item, .notification-item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    
+    .switch {
+      align-self: flex-end;
+    }
+  }

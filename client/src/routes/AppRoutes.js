@@ -13,6 +13,7 @@ import Login from '../pages/Login.js';
 import PrivateCompenents from '../components/Privatecomponent.js';
 import Products from '../pages/Products.js';
 import MyProfile from '../pages/UserProfile.js';
+import Settings from '../pages/Settings.js';
 const AppRoutes = () => {
   return (
     <>
@@ -24,6 +25,7 @@ const AppRoutes = () => {
           <Route path="/logout" element={<Logout/>} />
           <Route path="/products" element={<Products/>} />
           <Route path="/userprofile" element={<MyProfile/>} />
+          <Route path="settings" element={<Settings/>}/>
 
         </Route>
         <Route path='/cropInfo' element={<CropInfo />} />
