@@ -26,6 +26,15 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   }
+  ,
+  address:{
+    type: String,
+    required: true
+  },
+  bio:{
+    type: String,
+    required: true
+  }
 });
 
 module.exports = mongoose.model('User', UserSchema);

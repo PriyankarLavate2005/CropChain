@@ -40,6 +40,19 @@ router.post('/signup', async (req, res) => {
   }
 });
 
+
+router.put('/api/users/:id', async (req, res) => {
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    res.json(updatedUser);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
 // Login
 router.post('/login', async (req, res) => {
   try {

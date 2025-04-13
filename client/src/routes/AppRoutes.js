@@ -14,6 +14,7 @@ import PrivateCompenents from '../components/Privatecomponent.js';
 import Products from '../pages/Products.js';
 import MyProfile from '../pages/UserProfile.js';
 import Settings from '../pages/Settings.js';
+import ContactPage from '../pages/Contact';
 const AppRoutes = () => {
   return (
     <>
@@ -21,17 +22,18 @@ const AppRoutes = () => {
       <Routes>
         <Route element={<PrivateCompenents />}>
           <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/logout" element={<Logout/>} />
-          <Route path="/products" element={<Products/>} />
-          <Route path="/userprofile" element={<MyProfile/>} />
-          <Route path="settings" element={<Settings/>}/>
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/logout" element={<Logout />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/userprofile" element={<MyProfile />} />
+          <Route path="settings" element={<Settings />} />
+
 
         </Route>
         <Route path='/cropInfo' element={<CropInfo />} />
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path='/login' element={<Login/>}/>
+        <Route path='/login' element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
       </Routes>
     </>

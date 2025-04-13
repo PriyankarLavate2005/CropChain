@@ -105,6 +105,18 @@ const deleteOrder = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+const UpdateUserDetails= async (req, res) => {
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    res.json(updatedUser);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+}
 
 module.exports = {
   createOrder,
@@ -112,5 +124,6 @@ module.exports = {
   getUserOrders,
   getOrderById,
   updateOrderStatus,
-  deleteOrder
+  deleteOrder,
+  UpdateUserDetails
 };

@@ -53,6 +53,8 @@ const MyProfile = () => {
     setEditMode(false);
     const updatedUser = { ...user, name: profileData.name, email: profileData.email };
     localStorage.setItem('user', JSON.stringify(updatedUser));
+     
+
   };
 
   const handleAddProduct = () => {
