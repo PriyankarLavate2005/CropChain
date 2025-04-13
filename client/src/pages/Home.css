@@ -1,310 +1,402 @@
-/* Base Styles */
-.home-container {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #333;
-  max-width: 100%;
-  overflow-x: hidden;
-}
-
-/* Hero Section */
-.hero-section {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 4rem 2rem;
-  background: linear-gradient(135deg, #f5fff9 0%, #e0f7e8 100%);
-  min-height: 80vh;
-}
-
-.hero-content {
-  flex: 1;
-  padding-right: 2rem;
-  max-width: 600px;
-}
-
-.hero-image {
-  flex: 1;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-  max-width: 600px;
-}
-
-.hero-image img {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.hero-image:hover img {
-  transform: scale(1.02);
-}
-
-.hero-title {
-  font-size: 3rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-  color: #2c3e50;
-  line-height: 1.2;
-}
-
-.hero-subtitle {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-  color: #5a6d6e;
-  line-height: 1.6;
-}
-
-.hero-buttons {
-  display: flex;
-  gap: 1rem;
-}
-
-/* Button Styles */
-.primary-button, .secondary-button {
-  padding: 0.8rem 1.8rem;
-  border-radius: 50px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border: none;
-  font-size: 1rem;
-}
-
-.primary-button {
-  background-color: #27ae60;
-  color: white;
-}
-
-.primary-button:hover {
-  background-color: #2ecc71;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
-}
-
-.secondary-button {
-  background-color: transparent;
-  border: 2px solid #27ae60;
-  color: #27ae60;
-}
-
-.secondary-button:hover {
-  background-color: rgba(39, 174, 96, 0.1);
-  transform: translateY(-2px);
-}
-
-/* Section Titles */
-.section-title {
-  text-align: center;
-  font-size: 2.5rem;
-  margin-bottom: 3rem;
-  color: #2c3e50;
-  position: relative;
-}
-
-.section-title::after {
-  content: '';
-  display: block;
-  width: 80px;
-  height: 4px;
-  background: #27ae60;
-  margin: 0.5rem auto;
-  border-radius: 2px;
-}
-
-/* Features Section */
-.features-section {
-  padding: 5rem 2rem;
-  background-color: white;
-}
-
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-top: 3rem;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.feature-card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 2rem;
-  text-align: center;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.feature-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-}
-
-.feature-icon {
-  width: 120px;
-  height: 120px;
-  margin: 0 auto 1.5rem;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 3px solid #27ae60;
-}
-
-.feature-icon img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.feature-card h3 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  color: #2c3e50;
-}
-
-.feature-card p {
-  color: #7f8c8d;
-  line-height: 1.6;
-}
-
-/* Farmers Section */
-.farmers-section {
-  padding: 5rem 2rem;
-  background-color: #f9f9f9;
-}
-
-.farmers-container {
-  display: flex;
-  align-items: center;
-  gap: 3rem;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.farmers-content {
-  flex: 1;
-  padding-right: 2rem;
-}
-
-.farmers-content h2 {
-  font-size: 2.5rem;
-  margin-bottom: 2rem;
-  color: #2c3e50;
-  position: relative;
-}
-
-.farmers-content h2::after {
-  content: '';
-  position: absolute;
-  bottom: -0.75rem;
-  left: 0;
-  width: 160px;
-  height: 4px;
-  background: #27ae60;
-  border-radius: 2px;
-}
-
-.farmers-content p {
-  font-size: 1.1rem;
-  line-height: 1.8;
-  color: #555;
-  margin-bottom: 1.5rem;
-}
-
-.farmer-signature-card {
-  flex: 1;
-  background: white;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-  max-width: 400px;
-}
-
-.farmer-profile {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-}
-
-.farmer-photo {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid #27ae60;
-}
-
-.farmer-details {
-  text-align: left;
-}
-
-.farmer-name {
-  font-weight: 700;
-  color: #2c3e50;
-  margin-bottom: 0.3rem;
-  font-size: 1.2rem;
-}
-
-.farmer-title {
-  color: #7f8c8d;
-  font-size: 0.9rem;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .hero-section {
-    flex-direction: column;
+/* Basic styling for the Home page
+.home {
+    font-family: 'Montserrat', sans-serif;
+    padding: 20px;
+    background-color: #f4f4f4;
+    color: #333;
     text-align: center;
-    padding: 2rem 1rem;
-    min-height: auto;
+  }
+  
+  .home-header {
+    background: linear-gradient(90deg, #92c5c0 0%, #38ef7d 100%);
+    color: white;
+    padding: 50px 20px;
+    border-radius: 10px;
+  }
+  
+  .home-header h1 {
+    font-size: 3rem;
+    margin: 0;
+  }
+  
+  .home-header p {
+    font-size: 1.5rem;
+    margin: 10px 0 20px;
+  }
+  
+  .cta-button {
+    background-color: #ffeb3b;
+    color: #333;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    width: 200px;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .cta-button:hover {
+    background-color: #f1c40f;
+  }
+  
+  .home-features {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 40px;
+  }
+  
+  .feature {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 30%;
+  }
+  
+  .feature img {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .feature h2 {
+    font-size: 1.5rem;
+  }
+  
+  .feature p {
+    font-size: 1rem;
+    margin: 10px 0;
+  }
+   */
+
+
+   /* Base Styles */
+   .home-container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+  
+  /* Hero Section */
+  .hero-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4rem 2rem;
+    background: linear-gradient(135deg, #fcfdff 0%, #edf1ef 100%);
   }
   
   .hero-content {
-    padding-right: 0;
-    margin-bottom: 2rem;
-    max-width: 100%;
+    flex: 1;
+    padding-right: 2rem;
   }
   
-  .hero-subtitle {
-    max-width: 100%;
+  .hero-image {
+    flex: 1;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
   }
   
-  .hero-buttons {
-    justify-content: center;
+  .hero-image img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  .hero-image:hover img {
+    transform: scale(1.02);
   }
   
   .hero-title {
-    font-size: 2.2rem;
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
+    line-height: 1.2;
   }
   
+  .hero-subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    color: #7f8c8d;
+    max-width: 80%;
+  }
+  
+  .hero-buttons {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  /* Button Styles */
+  .primary-button, .secondary-button, .outline-button {
+    padding: 0.8rem 1.8rem;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+  }
+  
+  .primary-button {
+    background-color: #27ae60;
+    color: white;
+  }
+  
+  .primary-button:hover {
+    background-color: #2ecc71;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+  }
+  
+  .secondary-button {
+    background-color: transparent;
+    border: 2px solid #27ae60;
+    color: #27ae60;
+  }
+  
+  .secondary-button:hover {
+    background-color: rgba(39, 174, 96, 0.1);
+    transform: translateY(-2px);
+  }
+  
+  .outline-button {
+    background-color: transparent;
+    border: 2px solid #2c3e50;
+    color: #2c3e50;
+  }
+  
+  .outline-button:hover {
+    background-color: rgba(44, 62, 80, 0.1);
+  }
+  
+  .primary-button.large {
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+  }
+  
+  /* Section Titles */
   .section-title {
-    font-size: 2rem;
-  }
-  
-  .farmers-container {
-    flex-direction: column;
-    gap: 2rem;
-  }
-  
-  .farmers-content {
-    padding-right: 0;
     text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
+    position: relative;
   }
   
-  .farmers-content h2::after {
-    left: 50%;
+  .section-title::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background: #27ae60;
+    margin: 0.5rem auto;
+    border-radius: 2px;
+  }
+  
+  /* Features Section */
+  .features-section {
+    padding: 5rem 2rem;
+    background-color: white;
+  }
+  
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+  
+  .feature-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+  }
+  
+  .feature-icon {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 1.5rem;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #27ae60;
+  }
+  
+  .feature-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .feature-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #2c3e50;
+  }
+  
+  .feature-card p {
+    color: #7f8c8d;
+    line-height: 1.6;
+  }
+  
+  /* Seasonal Section */
+  
+ 
+  /* Testimonials Section - Updated for Farmers */
+/* Testimonials Section - Proper Two Column Layout */
+.testimonials-section {
+    padding: 5rem 2rem;
+    background-color: #f9f9f9;
+  }
+  
+  .testimonials-container {
+    display: flex;
+    align-items: flex-start; /* Changed to flex-start for better alignment */
+    gap: 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .testimonial-content {
+    flex: 1;
+    padding-right: 2rem; /* Added padding for better spacing */
+  }
+  
+  .testimonial-content h2 {
+    text-align: center; 
+    font-size: 2.5rem;
+    margin-left: 12rem;
+    margin-bottom: 2rem; /* Increased margin to create space for underline */
+    color: #2c3e50;
+    position: relative;
+    display: inline-block; /* Added this to contain the underline */
+  }
+  
+  .testimonial-content h2::after {
+    left: 50%; /* Center the underline */
     transform: translateX(-50%);
+    content: '';
+    position: absolute; /* Changed to absolute positioning */
+    bottom: -0.75rem; /* Positions it right below text */
+    width: 160px;
+    height: 4px;
+    background: #27ae60;
+    border-radius: 2px;
+  }
+  
+  .testimonial-content p {
+   position: relative;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #555;
   }
   
   .farmer-signature-card {
-    max-width: 100%;
-    margin-top: 2rem;
+    flex: 1;
+    background: white;
+    padding: 3.6rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    max-width: 500px;
+    height: 250px;
   }
   
   .farmer-profile {
-    justify-content: center;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
   }
-}
+  
+  .farmer-photo {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #27ae60;
+  }
+  
+  .farmer-details {
+    text-align: left;
+  }
+  
+  .farmer-name {
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 0.3rem;
+  }
+  
+  .farmer-title {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .testimonials-container {
+      flex-direction: column;
+      gap: 2rem;
+    }
+    
+    .testimonial-content {
+      padding-right: 0;
+      text-align: center;
+    }
+    
+    .testimonial-content h2::after {
+      margin: 0.5rem auto;
+    }
+    
+    .farmer-signature-card {
+      max-width: 100%;
+      margin: 0 auto;
+    }
+    
+    .farmer-profile {
+      justify-content: center;
+    }
+  }
+  
+  
+ 
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .hero-section {
+      flex-direction: column;
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+    
+    .hero-content {
+      padding-right: 0;
+      margin-bottom: 2rem;
+    }
+    
+    .hero-subtitle {
+      max-width: 100%;
+    }
+    
+    .hero-buttons {
+      justify-content: center;
+    }
+    
+    .hero-title {
+      font-size: 2.2rem;
+    }
+    
+    .section-title {
+      font-size: 2rem;
+    }
+  }
