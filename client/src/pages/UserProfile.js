@@ -59,17 +59,8 @@ const MyProfile = () => {
 
   const handleAddProduct = () => {
     // In a real app, this would open a product form modal
-    const newProduct = {
-      id: products.length + 1,
-      name: 'New Product',
-      price: '$0.00',
-      category: 'Category',
-      stock: 'Available',
-      image: 'https://images.unsplash.com/photo-1444459094717-a39f1e3e0903?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'
-    };
-    setProducts([...products, newProduct]);
+    navigate('/userUploadedProducts');      
   };
-
   return (
     <div className="profile-container">
       <div className="profile-header">

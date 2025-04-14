@@ -1,65 +1,136 @@
-import React, { useState,useEffect } from 'react';
-import './Signup.css';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios'
-function SignUp(){
-  const [name,setname]=useState('')
-  const [email,setemail]=useState('')
-  const [password,setpassword]=useState('')
-  const [phone,setphone]=useState('')
-  const [zip,setzip]=useState('')
-  const Navigate=useNavigate()
-  const Submitform =async (e)=>{
-  e.preventDefault();
-  let result = await fetch("http://localhost:5000/api/auth/signup",{
-    method:'post',
-    body:JSON.stringify({name,email,password,phone,zip}),
-    headers:{
-      'content-type':'application/json'
-    },
-  })
-  result=await result.json()
-  console.warn(result)
-  if(result){
-    localStorage.setItem('user',JSON.stringify(result))
-    Navigate('/')
-  }
-  else{
-    alert("Something went wrong")
-  }
- }
- useEffect(() => {
-  const auth = localStorage.getItem('user');
-  if (auth) {
-      Navigate('/')
-  }
-})
+import axios from 'axios';
+import './Signup.css';
+
+function SignUp() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    phone: '',
+    zip: ''
+  });
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const auth = localStorage.getItem('user');
+    if (auth) {
+      navigate('/');
+    }
+  }, [navigate]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError('');
+
+    try {
+      // Basic validation
+      if (!formData.name || !formData.email || !formData.password) {
+        throw new Error('Name, email and password are required');
+      }
+
+      const response = await axios.post('http://localhost:5000/api/auth/signup', formData, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.data.success) {
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        localStorage.setItem('token', response.data.token); // Store token separately
+        navigate('/');
+      } else {
+        throw new Error(response.data.message || 'Registration failed');
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || err.message || 'Something went wrong');
+      console.error('Signup error:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="signup-container">
       <h1>Create an Account</h1>
-      <form method='POST'>
+      {error && <div className="error-message">{error}</div>}
+      
+      <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Name</label>
-          <input type="text" name="name"  onChange={(e)=>{setname(e.target.value)}} required />
+          <input 
+            type="text" 
+            name="name" 
+            value={formData.name}
+            onChange={handleChange} 
+            required 
+          />
         </div>
+        
         <div className="form-group">
           <label>Email</label>
-          <input type="email" name="email" onChange={(e)=>{setemail(e.target.value)}}   required />
+          <input 
+            type="email" 
+            name="email" 
+            value={formData.email}
+            onChange={handleChange} 
+            required 
+          />
         </div>
+        
         <div className="form-group">
           <label>Phone</label>
-          <input type="text" name="phone" onChange={(e)=>{setphone(e.target.value)}}  required />
+          <input 
+            type="tel" 
+            name="phone" 
+            value={formData.phone}
+            onChange={handleChange} 
+          />
         </div>
+        
         <div className="form-group">
           <label>ZIP Code</label>
-          <input type="text" name="zip" onChange={(e)=>{setzip(e.target.value)}}  required />
+          <input 
+            type="text" 
+            name="zip" 
+            value={formData.zip}
+            onChange={handleChange} 
+          />
         </div>
+        
         <div className="form-group">
           <label>Password</label>
-          <input type="password" name="password"  onChange={(e)=>{setpassword(e.target.value)}} required />
+          <input 
+            type="password" 
+            name="password" 
+            value={formData.password}
+            onChange={handleChange} 
+            minLength="6"
+            required 
+          />
         </div>
-         <button className="signup-button" onClick={Submitform}>SignUp</button>
+        
+        <button 
+          type="submit" 
+          className="signup-button" 
+          disabled={isLoading}
+        >
+          {isLoading ? 'Creating Account...' : 'Sign Up'}
+        </button>
       </form>
+      
       <p>Already have an account? <a href="/login">Log in here</a></p>
     </div>
   );
