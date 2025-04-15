@@ -1,138 +1,118 @@
 const Product = require('../models/Product');
-const multer = require('multer');
-const path = require('path');
 const fs = require('fs');
-const jwt = require('jsonwebtoken');
-require('dotenv').config();
+const path = require('path');
 
-// ... (keep your existing multer configuration) ...
-
-// Helper function to verify JWT
-const verifyToken = (token) => {
-  try {
-    return jwt.verify(token, process.env.JWT_SECRET);
-  } catch (err) {
-    return null;
-  }
-};
-
-// Upload product (with auth)
+// @desc    Upload a new product
+// @route   POST /api/products/upload
+// @access  Private
 exports.uploadProduct = async (req, res) => {
-  // Check for token in headers
-  const token = req.headers.authorization?.split(' ')[1];
-  if (!token) {
-    return res.status(401).json({ success: false, message: 'No token provided' });
-  }
-
-  // Verify token
-  const decoded = verifyToken(token);
-  if (!decoded) {
-    return res.status(401).json({ success: false, message: 'Invalid token' });
-  }
-
-  upload(req, res, async (err) => {
-    if (err) {
-      return res.status(400).json({ 
-        success: false, 
-        message: err.message 
-      });
-    }
-
-    try {
-      const { name, price, category, stock } = req.body;
-      
-      if (!name || !price || !category || !stock) {
-        if (req.file) fs.unlinkSync(req.file.path);
-        return res.status(400).json({ 
-          success: false, 
-          message: 'Missing required fields' 
-        });
-      }
-
-      const product = new Product({
-        name,
-        price: parseFloat(price),
-        category,
-        stock,
-        imageUrl: req.file ? `/uploads/products/${req.file.filename}` : null,
-        owner: decoded.userId // Use the userId from the token
-      });
-
-      await product.save();
-      res.status(201).json({ success: true, product });
-
-    } catch (error) {
-      if (req.file) fs.unlinkSync(req.file.path);
-      res.status(500).json({ 
-        success: false, 
-        message: 'Server error',
-        error: error.message 
-      });
-    }
-  });
-};
-
-// Get all products (public)
-exports.getProducts = async (req, res) => {
   try {
-    const products = await Product.find();
-    res.json({ success: true, products });
-  } catch (error) {
-    res.status(500).json({ 
-      success: false, 
-      message: 'Failed to fetch products',
-      error: error.message 
+    // Check if user is authenticated
+    if (!req.user) {
+      return res.status(401).json({ message: 'Not authorized' });
+    }
+
+    // Check if image was uploaded
+    if (!req.file) {
+      return res.status(400).json({ message: 'Please upload an image' });
+    }
+
+    const { name, price, category, description, stock } = req.body;
+
+    // Create new product
+    const product = await Product.create({
+      name,
+      price,
+      category,
+      description,
+      stock,
+      image: req.file.path,
+      user: req.user.id
+    });
+
+    res.status(201).json({
+      success: true,
+      data: product
+    });
+  } catch (err) {
+    console.error(err);
+    
+    // If product creation fails but image was uploaded, delete the image
+    if (req.file) {
+      fs.unlink(req.file.path, (unlinkErr) => {
+        if (unlinkErr) console.error('Error deleting uploaded image:', unlinkErr);
+      });
+    }
+
+    res.status(500).json({
+      success: false,
+      message: 'Product upload failed',
+      error: err.message
     });
   }
 };
 
-// Delete product (with auth)
+// @desc    Get all products for a user
+// @route   GET /api/products/myproducts
+// @access  Private
+exports.getUserProducts = async (req, res) => {
+  try {
+    const products = await Product.find({ user: req.user.id }).sort('-createdAt');
+    
+    res.status(200).json({
+      success: true,
+      count: products.length,
+      data: products
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch products',
+      error: err.message
+    });
+  }
+};
+
+// @desc    Delete a product
+// @route   DELETE /api/products/:id
+// @access  Private
 exports.deleteProduct = async (req, res) => {
-  // Check for token
-  const token = req.headers.authorization?.split(' ')[1];
-  if (!token) {
-    return res.status(401).json({ success: false, message: 'No token provided' });
-  }
-
-  // Verify token
-  const decoded = verifyToken(token);
-  if (!decoded) {
-    return res.status(401).json({ success: false, message: 'Invalid token' });
-  }
-
   try {
     const product = await Product.findById(req.params.id);
-    
+
     if (!product) {
-      return res.status(404).json({ 
-        success: false, 
-        message: 'Product not found' 
+      return res.status(404).json({
+        success: false,
+        message: 'Product not found'
       });
     }
 
-    // Check if the user owns the product
-    if (product.owner.toString() !== decoded.userId) {
-      return res.status(403).json({ 
-        success: false, 
-        message: 'Not authorized to delete this product' 
+    // Make sure user owns the product
+    if (product.user.toString() !== req.user.id) {
+      return res.status(401).json({
+        success: false,
+        message: 'Not authorized to delete this product'
       });
     }
 
-    // Delete the product
-    await Product.findByIdAndDelete(req.params.id);
+    // Delete the image file
+    fs.unlink(product.image, (err) => {
+      if (err) console.error('Error deleting product image:', err);
+    });
 
-    // Delete associated image
-    if (product.imageUrl) {
-      const imagePath = path.join(__dirname, '..', product.imageUrl);
-      if (fs.existsSync(imagePath)) fs.unlinkSync(imagePath);
-    }
+    await product.remove();
 
-    res.json({ success: true, message: 'Product deleted' });
-  } catch (error) {
-    res.status(500).json({ 
-      success: false, 
-      message: 'Server error',
-      error: error.message 
+    res.status(200).json({
+      success: true,
+      data: {}
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to delete product',
+      error: err.message
     });
   }
 };

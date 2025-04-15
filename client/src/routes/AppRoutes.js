@@ -15,7 +15,7 @@ import Products from '../pages/Products.js';
 import MyProfile from '../pages/UserProfile.js';
 import Settings from '../pages/Settings.js';
 import ContactPage from '../pages/Contact';
-import UserUploadedProducts from '../pages/userProducts.js';
+import UserUploadedProducts from '../pages/userUploadedProducts.js';
 const AppRoutes = () => {
   return (
     <>
@@ -28,7 +28,7 @@ const AppRoutes = () => {
           <Route path="/products" element={<Products />} />
           <Route path="/userprofile" element={<MyProfile />} />
           <Route path="settings" element={<Settings />} />
-          <Route path="//userUploadedProducts" element={<UserUploadedProducts/>}/>
+          <Route path="/userUploadedProducts" element={<UserUploadedProducts/>}/>
         </Route>
         <Route path='/cropInfo' element={<CropInfo />} />
         <Route path="/" element={<Home />} />

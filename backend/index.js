@@ -2,6 +2,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
+const path = require('path');
 const PORT = process.env.PORT || 5000;
 const cors = require('cors');
 const orderRoutes = require('./routes/orderRoutes')
@@ -11,7 +12,7 @@ connectDB()
 
 app.use(express.json());
 app.use(cors()); // Use the cors middleware
-
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/orders', orderRoutes);
 app.use('/api/products', productRoutes);
