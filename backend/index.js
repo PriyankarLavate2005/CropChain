@@ -7,11 +7,16 @@ const PORT = process.env.PORT || 5000;
 const cors = require('cors');
 const orderRoutes = require('./routes/orderRoutes')
 const productRoutes = require("./routes/productRoutes")
+const authMiddleware = require('./middleware/authMiddleware');
 const connectDB = require('./config/DB');
+app.use(cors({
+	origin: 'http://localhost:3000',
+	credentials: true
+  }));
+app.use(express.json());
 connectDB()
 
-app.use(express.json());
-app.use(cors()); // Use the cors middleware
+ // Use the cors middleware
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/orders', orderRoutes);
@@ -23,7 +28,7 @@ const productSchema1 = new mongoose.Schema({
 	price: Number,
 	image: String,
 });
-const Product1 = mongoose.model('Product1', productSchema1);
+const Product1 = mongoose.model('Product9', productSchema1);
 
 
 // Function to seed initial data into the database
