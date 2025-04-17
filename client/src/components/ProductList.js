@@ -11,10 +11,9 @@ const ProductList = () => {
   const [showCart, setShowCart] = useState(false);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(3000);
-  const [selectedType, setSelectedType] = useState('all');
+  const [selectedCategory, setSelectedCategory] = useState('all');
 
   useEffect(() => {
-    // Fetch products from API
     const fetchProducts = async () => {
       try {
         const response = await fetch('http://localhost:5000/api/products');
@@ -29,22 +28,28 @@ const ProductList = () => {
   }, []);
 
   const handleSortByPrice = () => {
-    const sorted = [...filteredProducts].sort((a, b) => a.price - b.price);
+    const sorted = [...filteredProducts].sort((a, b) => {
+      // Extract numerical value from price string (e.g., "$2.50/kg" -> 2.50)
+      const priceA = parseFloat(a.price.replace(/[^0-9.]/g, ''));
+      const priceB = parseFloat(b.price.replace(/[^0-9.]/g, ''));
+      return priceA - priceB;
+    });
     setFilteredProducts(sorted);
   };
 
   const handleFilterByPriceRange = () => {
-    const filtered = products.filter(
-      product => product.price >= minPrice && product.price <= maxPrice
-    );
+    const filtered = products.filter(product => {
+      const price = parseFloat(product.price.replace(/[^0-9.]/g, ''));
+      return price >= minPrice && price <= maxPrice;
+    });
     setFilteredProducts(filtered);
   };
 
-  const handleFilterByType = () => {
-    if (selectedType === 'all') {
+  const handleFilterByCategory = () => {
+    if (selectedCategory === 'all') {
       setFilteredProducts([...products]);
     } else {
-      const filtered = products.filter(product => product.type === selectedType);
+      const filtered = products.filter(product => product.category === selectedCategory);
       setFilteredProducts(filtered);
     }
   };
@@ -58,7 +63,10 @@ const ProductList = () => {
   };
 
   const calculateTotal = () => {
-    return cartItems.reduce((total, item) => total + item.price, 0);
+    return cartItems.reduce((total, item) => {
+      const price = parseFloat(item.price.replace(/[^0-9.]/g, ''));
+      return total + price;
+    }, 0);
   };
 
   return (
@@ -110,15 +118,18 @@ const ProductList = () => {
         <div className="filter-group">
           <label className="filter-label">Category:</label>
           <select
-            value={selectedType}
-            onChange={(e) => setSelectedType(e.target.value)}
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
             className="category-select"
           >
             <option value="all">All Products</option>
-            <option value="Fruit">Fruits</option>
-            <option value="Vegetable">Vegetables</option>
+            <option value="Vegetables">Vegetables</option>
+            <option value="Fruits">Fruits</option>
+            <option value="Grains">Grains</option>
+            <option value="Dairy">Dairy</option>
+            <option value="Other">Other</option>
           </select>
-          <button className="filter-btn" onClick={handleFilterByType}>
+          <button className="filter-btn" onClick={handleFilterByCategory}>
             Filter
           </button>
         </div>
@@ -126,7 +137,7 @@ const ProductList = () => {
 
       <div className="products-grid">
         {filteredProducts.map((product) => (
-          <div key={product._id} className="product-card">
+          <div key={product._id} className="product-card-wrapper">
             <ProductItem product={product} />
             <button 
               className="add-to-cart-btn"

@@ -1,49 +1,40 @@
-// client/src/components/ProductItem.js
 import React, { useContext } from 'react';
 import { itemContext } from '../context/ItemContext';
 
-
 const ProductItem = ({ product }) => {
-	const { addToCart, removeFromCart } = useContext(itemContext)
-	const handleAddToCart = (product) => {
-		console.log(product)
-		addToCart(product)
+  const { addToCart, removeFromCart } = useContext(itemContext);
+  
+  const handleAddToCart = () => {
+    addToCart(product);
+  };
 
-	};
-	const handleRemoveToCart = (product) => {
-		console.log("product removed", product)
-		removeFromCart(product)
+  const handleRemoveFromCart = () => {
+    removeFromCart(product);
+  };
 
-	};
-	return (
-		<div className="product-card">
-			<img className="product-image"
-				src={product.image}
-				alt={product.name} />
-			<div className="product-details">
-				<h3 style={{ fontWeight: "700" }}>
-					{product.name}
-				</h3>
-				<p style={{ fontWeight: "300" }}>
-					{product.description}
-				</p>
-				<p style={{ fontWeight: "500" }}>
-					Price: {product.price} Rs/Kg
-				</p>
-				{/* {/* <button onClick={
-					() => handleAddToCart(product)
-				}> 
-			
-				</button> */}
-				<button onClick={
-					() =>
-						handleRemoveToCart(product)
-				}>
-					-
-				</button>
-			</div>
-		</div>
-	);
+  return (
+    <div className="product-card">
+      <img 
+        className="product-image"
+        src={`http://localhost:5000/${product.image}`} 
+        alt={product.name} 
+      />
+      <div className="product-details">
+        <h3>{product.name}</h3>
+        <p><strong>Price:</strong> {product.price}</p>
+        <p><strong>Category:</strong> {product.category}</p>
+        <p><strong>Stock:</strong> {product.stock}</p>
+        <p><strong>Description:</strong> {product.description}</p>
+        {product.user && (
+          <p><strong>Uploaded by:</strong> {product.user.name}</p>
+        )}
+        <div className="product-actions">
+          <button onClick={handleAddToCart}>+</button>
+          <button onClick={handleRemoveFromCart}>-</button>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default ProductItem;

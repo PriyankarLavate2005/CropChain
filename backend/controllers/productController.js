@@ -106,3 +106,20 @@ exports.deleteProduct = async (req, res) => {
     });
   }
 };
+exports.getProducts = async (req, res) => {
+  try {
+    const products = await Product.find().populate('user', 'name');
+    res.status(200).json({ 
+      success: true, 
+      count: products.length, 
+      data: products 
+    });
+  } catch (err) {
+    console.error('Error fetching products:', err);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch products',
+      error: err.message
+    });
+  }
+};
