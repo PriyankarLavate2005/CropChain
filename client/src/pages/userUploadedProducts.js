@@ -25,6 +25,8 @@ const UserUploadedProducts = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      console.log('Selected file:', file);
+      
       // Validate file type
       const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
       if (!validTypes.includes(file.type)) {
@@ -54,13 +56,8 @@ const UserUploadedProducts = () => {
     setIsSubmitting(true);
     setError('');
     
-    // Basic validation
-    if (!productData.name || !productData.price || !productData.category || !productData.image) {
-      setError('Please fill all required fields');
-      setIsSubmitting(false);
-      return;
-    }
-
+    console.log('Submitting product data:', productData);
+    
     try {
       const formData = new FormData();
       formData.append('name', productData.name);
@@ -75,6 +72,7 @@ const UserUploadedProducts = () => {
         throw new Error('No authentication token found');
       }
 
+      console.log('Sending request to server...');
       const response = await fetch('http://localhost:5000/api/products/upload', {
         method: 'POST',
         body: formData,
@@ -83,15 +81,33 @@ const UserUploadedProducts = () => {
         }
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to upload product');
+      // First check if the response is JSON
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await response.text();
+        console.error('Received non-JSON response:', text);
+        throw new Error('Server returned an unexpected response');
       }
 
-      navigate('/myprofile?tab=products');
+      const responseData = await response.json();
+      console.log('Server response:', responseData);
+
+      if (!response.ok) {
+        throw new Error(responseData.message || 'Failed to upload product');
+      }
+
+      if (responseData.success) {
+        navigate('/myprofile?tab=products');
+      }
     } catch (error) {
-      setError(error.message || 'Failed to upload product. Please try again.');
+      console.error('Upload error:', error);
+      
+      let errorMessage = 'Failed to upload product. Please try again.';
+      if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      setError(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -110,7 +126,11 @@ const UserUploadedProducts = () => {
         </button>
       </div>
 
-      {error && <div className="error-message">{error}</div>}
+      {error && (
+        <div className="error-message">
+          <p>{error}</p>
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="product-form" encType="multipart/form-data">
         <div className="form-group">
@@ -227,13 +247,15 @@ const UserUploadedProducts = () => {
           )}
         </div>
 
-        <button 
-          type="submit" 
-          className="submit-btn"
-          disabled={isSubmitting || !productData.image}
-        >
-          {isSubmitting ? 'Uploading...' : 'Upload Product'}
-        </button>
+        <div className="form-actions">
+          <button 
+            type="submit" 
+            className="submit-btn"
+            disabled={isSubmitting || !productData.image}
+          >
+            {isSubmitting ? 'Uploading...' : 'Upload Product'}
+          </button>
+        </div>
       </form>
     </div>
   );
