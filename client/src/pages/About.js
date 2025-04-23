@@ -38,22 +38,26 @@ const About = () => {
     {
       icon: '🌱',
       title: 'Crop Guidance',
-      description: 'Personalized recommendations for your specific crops and region'
+      description: 'Personalized recommendations for your specific crops and region',
+      path: '/crop-guidance'
     },
     {
       icon: '⏰',
       title: 'Growth Tracking',
-      description: 'Monitor your crops development stages and get timely alerts'
+      description: 'Monitor your crops development stages and get timely alerts',
+      path: '/growth-tracking'
     },
     {
       icon: '🌦️',
       title: 'Weather Integration',
-      description: 'Accurate local weather forecasts tailored to your farm'
+      description: 'Accurate local weather forecasts tailored to your farm',
+      path: '/forcast'
     },
     {
       icon: '📊',
       title: 'Data Analytics',
-      description: 'Visualize your farm performance with easy-to-understand charts'
+      description: 'Visualize your farm performance with easy-to-understand charts',
+      path: '/data-analytics'
     }
   ];
 
@@ -113,11 +117,11 @@ const About = () => {
         </p>
         <div className="features-grid">
           {features.map((feature, index) => (
-            <div className="feature-card" key={index}>
+            <Link to={feature.path} className="feature-card" key={index}>
               <div className="feature-icon">{feature.icon}</div>
               <h3>{feature.title}</h3>
               <p>{feature.description}</p>
-            </div>
+            </Link>
           ))}
         </div>
       </section>

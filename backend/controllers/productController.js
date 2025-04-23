@@ -22,22 +22,11 @@ exports.uploadProduct = async (req, res) => {
     
     if (!name || !price || !category || !stock) {
       console.warn('Missing required fields:', { name, price, category, stock });
-      // Clean up the uploaded file
       fs.unlink(req.file.path, (err) => {
         if (err) console.error('Error deleting file:', err);
       });
       return res.status(400).json({ message: 'Please provide all required fields' });
     }
-  
-    console.log('Creating product with data:', {
-      name,
-      price,
-      category,
-      description: description || '',
-      stock,
-      image: req.file.path,
-      user: req.user.id
-    });
 
     const product = await Product.create({
       name,
@@ -69,7 +58,7 @@ exports.uploadProduct = async (req, res) => {
 exports.getUserProducts = async (req, res) => {
   console.log('Fetching products for user:', req.user.id);
   try {
-    const products = await Product.find({ user: req.user.id }).sort('-createdAt');
+    const products = await Product.find({ user: req.user.id }).sort('-createdAt').populate('user', 'name username');
     console.log(`Found ${products.length} products for user`);
     res.status(200).json({ success: true, count: products.length, data: products });
   } catch (err) {
@@ -118,9 +107,10 @@ exports.deleteProduct = async (req, res) => {
     });
   }
 };
+
 exports.getProducts = async (req, res) => {
   try {
-    const products = await Product.find().populate('user', 'name');
+    const products = await Product.find().populate('user', 'name username');
     res.status(200).json({ 
       success: true, 
       count: products.length, 

@@ -75,14 +75,14 @@ const Navbar = () => {
         </Link>
       </div>
 
-      {/* Mobile menu button (hidden on desktop) */}
+      {/* Mobile menu button (hidden on desktop)
       <button 
         className="navbar-mobile-toggle" 
         aria-label="Toggle menu"
         aria-expanded="false"
       >
         <span className="navbar-toggle-icon"></span>
-      </button>
+      </button> */}
 
       <ul className="navbar-links">
         <li><NavLink to="/">Home</NavLink></li>

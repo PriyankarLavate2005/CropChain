@@ -5,6 +5,8 @@ import Home from '../pages/Home';
 import ForgotPassword from '../pages/ForgotPassword.js';
 import About from '../pages/About';
 import Contact from '../pages/Contact';
+import Forecast from '../pages/Forcast.js';
+
 import Logout from '../pages/Logout.js';
 import SignUp from '../pages/Signup.js';
 import Navbar from '../components/Navbar';
@@ -29,6 +31,7 @@ const AppRoutes = () => {
           <Route path="/userprofile" element={<MyProfile />} />
           <Route path="settings" element={<Settings />} />
           <Route path="/userUploadedProducts" element={<UserUploadedProducts/>}/>
+          <Route path="/forcast" element={<Forecast/>} />
         </Route>
         <Route path='/cropInfo' element={<CropInfo />} />
         <Route path="/" element={<Home />} />
