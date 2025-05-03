@@ -1,38 +1,35 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/User');
 
-// Protect routes
-exports.protect = async (req, res, next) => {
-  let token;
+module.exports = function(req, res, next) {
+  // Get token from header
+  const token = req.header('x-auth-token');
 
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith('Bearer')
-  ) {
-    token = req.headers.authorization.split(' ')[1];
-  } else if (req.headers['x-auth-token']) {
-    token = req.headers['x-auth-token'];
-  }
-
+  // Check if no token
   if (!token) {
-    return res.status(401).json({
+    return res.status(401).json({ 
       success: false,
-      message: 'Not authorized to access this route'
+      message: 'No token, authorization denied' 
     });
   }
 
   try {
     // Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    req.user = await User.findById(decoded.id).select('-password');
-
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your_jwt_secret');
+    
+    // Make sure decoded has user property
+    if (!decoded.user || !decoded.user.id) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid token structure'
+      });
+    }
+    
+    req.user = decoded.user;
     next();
   } catch (err) {
-    console.error(err);
-    res.status(401).json({
+    res.status(401).json({ 
       success: false,
-      message: 'Not authorized, token failed'
+      message: 'Token is not valid' 
     });
   }
 };
