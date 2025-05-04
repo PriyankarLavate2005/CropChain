@@ -1,19 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { FaShoppingCart, FaFilter, FaSpinner } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 import ProductItem from './ProductItem';
-import Cart from './Cart';
 import './ProductList.css';
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
-  const [showCart, setShowCart] = useState(false);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(3000);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
+
+  // Format price to Indian Rupees
+  const formatINR = (amount) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      minimumFractionDigits: 2
+    }).format(amount);
+  };
+
+  // Extract numeric value from price string
+  const extractPriceValue = (priceString) => {
+    if (!priceString) return 0;
+    const numericValue = priceString.match(/\d+\.?\d*/);
+    return numericValue ? parseFloat(numericValue[0]) : 0;
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -23,7 +40,7 @@ const ProductList = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        setProducts(data.products || data); // Handle both response formats
+        setProducts(data.products || data);
         setFilteredProducts(data.products || data);
       } catch (error) {
         console.error('Error fetching products:', error);
@@ -42,13 +59,6 @@ const ProductList = () => {
       return priceA - priceB;
     });
     setFilteredProducts(sorted);
-  };
-
-  const extractPriceValue = (priceString) => {
-    if (!priceString) return 0;
-    // Handle different price formats: "$2.50", "2.50/kg", "2.50 per kg", etc.
-    const numericValue = priceString.match(/\d+\.?\d*/);
-    return numericValue ? parseFloat(numericValue[0]) : 0;
   };
 
   const handleFilterByPriceRange = () => {
@@ -77,11 +87,10 @@ const ProductList = () => {
 
   const addToCart = (product) => {
     setCartItems(prevItems => {
-      // Check if product already exists in cart
       const existingItem = prevItems.find(item => item._id === product._id);
       if (existingItem) {
         return prevItems.map(item =>
-          item._id === product._id 
+          item._id === product._id
             ? { ...item, quantity: (item.quantity || 1) + 1 }
             : item
         );
@@ -90,28 +99,13 @@ const ProductList = () => {
     });
   };
 
-  const removeFromCart = (productToRemove) => {
-    setCartItems(prevItems => 
-      prevItems.filter(product => product._id !== productToRemove._id)
-    );
+  const handleCartClick = () => {
+    navigate('/cart', {
+      state: {
+        cartItems: cartItems || [] // Ensure we always pass an array
+      }
+    });
   };
-
-  const updateQuantity = (productId, newQuantity) => {
-    if (newQuantity < 1) return;
-    setCartItems(prevItems =>
-      prevItems.map(item =>
-        item._id === productId ? { ...item, quantity: newQuantity } : item
-      )
-    );
-  };
-
-  const calculateTotal = () => {
-    return cartItems.reduce((total, item) => {
-      const price = extractPriceValue(item.price);
-      return total + (price * (item.quantity || 1));
-    }, 0).toFixed(2);
-  };
-
   if (loading) {
     return (
       <div className="loading-container">
@@ -134,14 +128,16 @@ const ProductList = () => {
     <div className="product-list-container">
       <div className="product-list-header">
         <h2>Fresh Harvest Market</h2>
-        <div 
-          className="cart-icon-container" 
-          onClick={() => setShowCart(true)}
+        <div
+          className="cart-icon-container"
+          onClick={handleCartClick}
           aria-label="View cart"
         >
           <FaShoppingCart className="cart-icon" />
           {cartItems.length > 0 && (
-            <span className="cart-badge">{cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0)}</span>
+            <span className="cart-badge">
+              {cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0)}
+            </span>
           )}
         </div>
       </div>
@@ -154,7 +150,7 @@ const ProductList = () => {
         </div>
 
         <div className="filter-group">
-          <label className="filter-label">Price Range:</label>
+          <label>Price Range (₹):</label>
           <div className="price-inputs">
             <input
               type="number"
@@ -162,16 +158,14 @@ const ProductList = () => {
               min="0"
               onChange={(e) => setMinPrice(Math.max(0, Number(e.target.value)))}
               placeholder="Min"
-              className="price-input"
             />
-            <span className="range-separator">-</span>
+            <span>-</span>
             <input
               type="number"
               value={maxPrice}
               min={minPrice}
               onChange={(e) => setMaxPrice(Math.max(minPrice, Number(e.target.value)))}
               placeholder="Max"
-              className="price-input"
             />
           </div>
           <button className="filter-btn" onClick={handleFilterByPriceRange}>
@@ -180,11 +174,10 @@ const ProductList = () => {
         </div>
 
         <div className="filter-group">
-          <label className="filter-label">Category:</label>
+          <label>Category:</label>
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="category-select"
           >
             <option value="all">All Products</option>
             <option value="Vegetables">Vegetables</option>
@@ -211,34 +204,15 @@ const ProductList = () => {
       ) : (
         <div className="products-grid">
           {filteredProducts.map((product) => (
-            <div key={product._id} className="product-card-wrapper">
-              <ProductItem 
-                product={product} 
-                imageUrl={product.image.startsWith('http') ? product.image : `http://localhost:5000/${product.image}`}
-              />
-              <button 
-                className="add-to-cart-btn"
-                onClick={() => addToCart(product)}
-                aria-label={`Add ${product.name} to cart`}
-              >
-                Add to Cart
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {showCart && (
-        <div className="cart-modal">
-          <div className="cart-modal-content">
-            <Cart 
-              cartItems={cartItems}
-              onRemoveItem={removeFromCart}
-              onUpdateQuantity={updateQuantity}
-              onClose={() => setShowCart(false)}
-              totalPrice={calculateTotal()}
+            <ProductItem
+              key={product._id}
+              product={product}
+              onAddToCart={addToCart}
+              formatINR={formatINR}
+              extractPriceValue={extractPriceValue}
+              imageUrl={product.image.startsWith('http') ? product.image : `http://localhost:5000/${product.image}`}
             />
-          </div>
+          ))}
         </div>
       )}
     </div>

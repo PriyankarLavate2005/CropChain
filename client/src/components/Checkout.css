@@ -1,0 +1,106 @@
+/* Checkout Component - Zero Padding */
+.checkout-container {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    min-height: 100vh;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+  }
+  
+  .checkout-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .checkout-header h2 {
+    font: 600 1.5rem/1 'Segoe UI', sans-serif;
+  }
+  
+  .back-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .checkout-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .checkout-form {
+    display: grid;
+    grid-template-rows: auto auto;
+    border-right: 1px solid #e0e0e0;
+  }
+  
+  .form-section {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .form-section h3 {
+    font: 500 1.1rem/1 'Segoe UI', sans-serif;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  
+  .form-group {
+    display: grid;
+    grid-template-rows: auto auto;
+  }
+  
+  .form-group input,
+  .form-group textarea {
+    border: 1px solid #e0e0e0;
+    width: 100%;
+  }
+  
+  .payment-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .payment-option {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    border-right: 1px solid #e0e0e0;
+  }
+  
+  .order-summary {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+  }
+  
+  .summary-items {
+    display: grid;
+    grid-auto-rows: min-content;
+    overflow-y: auto;
+  }
+  
+  .summary-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  
+  .place-order-btn {
+    background: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  @media (max-width: 768px) {
+    .checkout-content {
+      grid-template-columns: 1fr;
+    }
+    
+    .checkout-form {
+      border-right: none;
+      border-bottom: 1px solid #e0e0e0;
+    }
+  }
