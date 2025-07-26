@@ -1,134 +1,220 @@
-/* General Crop Info Page Styling */
-.crop-info {
-    width: 90%;
-    max-width: 1000px;
-    margin: 20px auto;
-    background-color: #ffffff;
-    padding: 30px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    font-family: 'Arial', sans-serif;
-  }
-  
-  /* Input and Button */
-  input[type="text"] {
-    padding: 12px 15px;
-    font-size: 16px;
-    width: 100%;
-    max-width: 320px;
-    margin-right: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    margin-bottom: 20px;
-    transition: all 0.3s ease;
-  }
-  
-  input[type="text"]:focus {
-    border-color: #4CAF50;
-    outline: none;
-  }
-  
-  button {
-    padding: 12px 20px;
-    font-size: 16px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  button:hover {
-    background-color: #45a049;
-  }
-  
-  /* Results Section */
-  .results {
-    margin-top: 20px;
-    background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  h3 {
-    font-size: 24px;
-    color: #333;
-    margin-bottom: 15px;
-  }
-  
-  p, ul {
-    font-size: 16px;
-    color: #555;
-  }
-  
-  ul {
-    list-style-type: square;
-    padding-left: 20px;
-  }
-  
-  ul li {
-    margin: 8px 0;
-  }
-  
-  /* Highlight solution text */
-  .highlight {
-    background-color: #fffb7d;
-    font-weight: bold;
-    padding: 3px 6px;
-    border-radius: 5px;
-  }
-  
-  /* Error Message */
-  .error {
-    color: #e74c3c;
-    font-size: 16px;
-    margin-top: 10px;
-    padding: 10px;
-    background-color: #f2dede;
-    border: 1px solid #ebccd1;
-    border-radius: 5px;
-  }
-  
-  /* Make it mobile responsive */
-  @media screen and (max-width: 768px) {
-    .crop-info {
-      width: 90%;
-      padding: 15px;
-    }
-  
-    input[type="text"], button {
-      width: 100%;
-      margin-bottom: 15px;
-    }
-  }
-  /* Styling for the image gallery */
-.image-gallery {
-  margin-top: 30px;
+/* Crop Info Page - Fixed Navbar & Professional Styling */
+.crop-info-page {
+  font-family: 'Poppins', sans-serif;
+  padding-top: 80px; /* Matches navbar height */
+  min-height: 100vh;
+  background-color: #f9fbfa;
 }
 
-.images {
+.crop-info-container {
+  width: 90%;
+  max-width: 1000px;
+  margin: 30px auto;
+  background-color: #ffffff;
+  padding: 40px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  position: relative;
+}
+
+/* Search Section */
+.search-section {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
   gap: 15px;
+  margin-bottom: 30px;
+  align-items: center;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 250px;
+  padding: 14px 20px;
+  font-size: 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+}
+
+.search-input:focus {
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+  outline: none;
+}
+
+.search-button {
+  padding: 14px 30px;
+  font-size: 16px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+}
+
+.search-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+}
+
+/* Results Section */
+.results-section {
+  margin-top: 40px;
+  background-color: #f9f9f9;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e8e8e8;
+}
+
+.crop-title {
+  font-size: 28px;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.crop-description {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+
+.crop-list {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.crop-list li {
+  margin: 12px 0;
+  padding-left: 25px;
+  position: relative;
+  line-height: 1.6;
+}
+
+.crop-list li::before {
+  content: '•';
+  color: #4CAF50;
+  font-size: 24px;
+  position: absolute;
+  left: 0;
+  top: -3px;
+}
+
+.highlight {
+  background-color: #e8f5e9;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #2c7a5a;
+}
+
+/* Image Gallery */
+.image-gallery {
+  margin-top: 40px;
+}
+
+.gallery-title {
+  font-size: 22px;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.images-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
 }
 
 .image-card {
-  width: 30%;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
   overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.image-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
 }
 
 .image-card img {
   width: 100%;
   height: 200px;
   object-fit: cover;
+  transition: transform 0.5s ease;
 }
 
-.error {
+.image-card:hover img {
+  transform: scale(1.05);
+}
+
+/* Error Message */
+.error-message {
   text-align: center;
-  color: red;
+  color: #e74c3c;
+  font-size: 16px;
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #fdecea;
+  border: 1px solid #f5c6cb;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+/* Loading State */
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: #4CAF50;
   font-size: 18px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .crop-info-container {
+    width: 95%;
+    padding: 25px;
+  }
+  
+  .search-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .search-input, .search-button {
+    width: 100%;
+  }
+  
+  .results-section {
+    padding: 20px;
+  }
+  
+  .crop-title {
+    font-size: 24px;
+  }
+  
+  .images-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .crop-info-page {
+    padding-top: 70px;
+  }
+  
+  .crop-info-container {
+    padding: 20px;
+  }
+  
+  .crop-title {
+    font-size: 22px;
+  }
 }
