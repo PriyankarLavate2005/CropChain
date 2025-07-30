@@ -27,7 +27,6 @@ function Login() {
             }));
         }
     };
-
     const validateForm = () => {
         const newErrors = {};
         if (!formData.email) newErrors.email = 'Email is required';
@@ -35,15 +34,13 @@ function Login() {
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoginError('');
         
         if (!validateForm()) return;
         
-        setIsSubmitting(true);
-        
+        setIsSubmitting(true);        
         try {
             const response = await axios.post('http://localhost:5000/api/auth/login', formData);
             
@@ -61,14 +58,12 @@ function Login() {
             setIsSubmitting(false);
         }
     };
-
     useEffect(() => {
         const auth = localStorage.getItem('user');
         if (auth) {
             navigate('/');
         }
     }, [navigate]);
-
     return (
         <div className="auth-container">
             <div className="auth-card">
@@ -90,7 +85,6 @@ function Login() {
                         />
                         {errors.email && <div className="invalid-feedback">{errors.email}</div>}
                     </div>
-
                     <div className="form-group">
                         <label htmlFor="password">Password</label>
                         <input
@@ -104,7 +98,6 @@ function Login() {
                         />
                         {errors.password && <div className="invalid-feedback">{errors.password}</div>}
                     </div>
-
                     <div className="form-group">
                         <button 
                             type="submit" 
