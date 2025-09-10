@@ -1,14 +1,22 @@
 const express = require('express');
+const nodemailer = require('nodemailer');
 const router = express.Router();
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-require('dotenv').config();
+const { validateForgotPassword, validateResetPassword } = require('../middleware/validation');
+const { forgotPassword, resetPassword } = require('../controllers/authController');
 
 // Helper function to generate JWT token
 const generateToken = (userId) => {
   return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '1h' });
 };
+
+// Forgot Password - Send OTP
+router.post('/forgot-password', validateForgotPassword, forgotPassword);
+
+// Verify OTP and Reset Password
+router.post('/reset-password', validateResetPassword, resetPassword);
 
 // Signup
 router.post('/signup', async (req, res) => {
