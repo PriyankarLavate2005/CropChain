@@ -14,7 +14,7 @@ import CropInfo from '../CropInfo/CropInfo.js';
 import Login from '../pages/Login.js';
 import PrivateCompenents from '../components/Privatecomponent.js';
 import Products from '../pages/Products.js';
-import MyProfile from '../pages/UserProfile.js';
+import UserProfile from '../pages/UserProfile.js';
 import Settings from '../pages/Settings.js';
 import ContactPage from '../pages/Contact';
 import UserUploadedProducts from '../pages/userUploadedProducts.js';
@@ -30,7 +30,7 @@ const AppRoutes = () => {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/products" element={<Products />} />
-          <Route path="/userprofile" element={<MyProfile />} />
+          <Route path="/userprofile" element={<UserProfile />} />
           <Route path="settings" element={<Settings />} />
           <Route path="/userUploadedProducts" element={<UserUploadedProducts/>}/>
           <Route path="/forcast" element={<Forecast/>} />

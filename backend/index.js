@@ -4,6 +4,8 @@ const cors = require('cors');
 const path = require('path');
 const nodemailer = require('nodemailer');
 require('dotenv').config();
+// In your server.js file
+const userProfileRoutes = require('./routes/userProfileroutes');
 
 // Import routes
 const orderRoutes = require('./routes/orderRoutes');
@@ -41,7 +43,7 @@ mongoose.connection.on('error', (err) => {
 
 // Serve static files from uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
+app.use('/api/user-profile', userProfileRoutes);
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/orders', orderRoutes);
