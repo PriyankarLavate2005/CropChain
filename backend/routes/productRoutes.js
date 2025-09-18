@@ -76,5 +76,27 @@ router.get('/', async (req, res) => {
     });
   }
 });
+router.get('/my-products',async (req, res) => {
+  try {
+    const userId = req.user.id;
+    if (userId){
+      console.log(userId)
+    }
+    const products = await Product.find({ user: userId })
+      .sort({ createdAt: -1 });
+    res.status(200).json({
+      success: true,
+      message: 'Products retrieved successfully',
+      data: products
+    });
+  } catch (error) {
+    console.error('Error fetching user products:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch products',
+      error: error.message
+    });
+  }
+});
 
 module.exports = router;

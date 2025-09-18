@@ -163,7 +163,38 @@ const UserProfile = () => {
       setProducts([]);
     }
   };
+const handleDeleteProduct = async (productId) => {
+  if (!window.confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
+    return;
+  }
 
+  try {
+    setLoading(true);
+    const token = localStorage.getItem('token');
+    
+    const response = await fetch(`${API_BASE_URL}/products/${productId}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to delete product');
+    }
+
+    // Remove the product from the local state
+    setProducts(products.filter(product => product._id !== productId));
+    
+    alert('Product deleted successfully!');
+  } catch (err) {
+    console.error('Error deleting product:', err);
+    alert('Failed to delete product. Please try again.');
+  } finally {
+    setLoading(false);
+  }
+};
   // Fetch user stats
   const fetchUserStats = async () => {
     try {
@@ -360,6 +391,8 @@ const UserProfile = () => {
         >
           My Products
         </button>
+
+
         <button
           className={`tab-btn ${activeTab === 'stats' ? 'active' : ''}`}
           onClick={() => setActiveTab('stats')}
@@ -575,18 +608,114 @@ const UserProfile = () => {
             )}
           </div>
         )}
-
         {activeTab === 'products' && (
+  <div className="products-content">
+    <div className="products-header">
+      <h2>My Products</h2>
+      <button
+        className="primary-btn"
+        onClick={() => navigate('/userproducts')}
+      >
+        <span className="btn-icon">+</span> view Products
+      </button>
+    </div>    
+    {products.length === 0 ? (
+      <div className="empty-state">
+        <div className="empty-icon">🛍️</div>
+        <h3>No Products Yet</h3>
+        <p>You haven't added any products to your farm.</p>
+        <button
+          className="primary-btn"
+          onClick={() => navigate('/userUploadedProducts')}
+        >
+          Add Your First Product
+        </button>
+      </div>
+    ) : (
+      <div className="products-grid">
+        {products.map(product => (
+          <div key={product._id} className="product-card">
+            <div
+              className="product-image"
+              style={{
+                backgroundImage: product.image
+                  ? `url(http://localhost:5000/uploads/${product.image})`
+                  : 'url(https://images.unsplash.com/photo-1619566636858-adf3ef46400b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60)'
+              }}
+            >
+              <span className={`stock-status ${product.stock > 0 ? 'in-stock' : 'out-of-stock'}`}>
+                {product.stock > 0 ? `${product.stock} In Stock` : 'Out of Stock'}
+              </span>
+              {product.isOrganic && <span className="organic-badge">🌱 Organic</span>}
+            </div>
+            
+            <div className="product-info">
+              <h3>{product.name}</h3>
+              <p className="product-description">{product.description || 'No description available'}</p>
+              
+              <div className="product-details">
+                <p className="price">${product.price} {product.unit && `/ ${product.unit}`}</p>
+                <p className="category">{product.category}</p>
+                {product.rating && (
+                  <div className="rating">
+                    <span className="stars">{'★'.repeat(Math.round(product.rating))}{'☆'.repeat(5 - Math.round(product.rating))}</span>
+                    <span className="rating-value">({product.rating})</span>
+                  </div>
+                )}
+              </div>
+              
+              <div className="product-meta">
+                <span className="created-date">
+                  Added: {new Date(product.createdAt).toLocaleDateString()}
+                </span>
+                {product.updatedAt !== product.createdAt && (
+                  <span className="updated-date">
+                    Updated: {new Date(product.updatedAt).toLocaleDateString()}
+                  </span>
+                )}
+              </div>
+              
+              <div className="product-actions">
+                <button
+                  className="edit-btn"
+                  onClick={() => navigate(`/edit-product/${product._id}`)}
+                  title="Edit product details"
+                >
+                  ✏️ Edit
+                </button>
+                <button
+                  className="view-btn"
+                  onClick={() => navigate(`/product/${product._id}`)}
+                  title="View product page"
+                >
+                  👁️ View
+                </button>
+                <button
+                  className="delete-btn"
+                  onClick={() => handleDeleteProduct(product._id)}
+                  title="Delete product"
+                >
+                  🗑️ Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+)}
+
+        {/* {activeTab === 'products' && (
           <div className="products-content">
             <h2>My Products</h2>
             {products.length === 0 ? (
-              <div className="empty-state">
-                <p>You haven't added any products yet.</p>
+              <div className="empty-state">             
                 <button
                   className="primary-btn"
-                  onClick={() => navigate('/add-product')}
+                  onClick={() => navigate('/userUploadedProducts')}
                 >
-                  Add Your First Product
+                  Add Your Product
                 </button>
               </div>
             ) : (
@@ -623,7 +752,7 @@ const UserProfile = () => {
               </div>
             )}
           </div>
-        )}
+        )} */}
 
         {activeTab === 'stats' && (
           <div className="stats-content">
