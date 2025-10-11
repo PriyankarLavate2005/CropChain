@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import emailjs from '@emailjs/browser';
 import './Contact.css';
 
 const ContactPage = () => {
@@ -8,6 +9,8 @@ const ContactPage = () => {
     message: ''
   });
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState('');
+  const formRef = useRef();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,13 +22,21 @@ const ContactPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you would typically send the form data to a server
-    console.log('Form submitted:', formData);
-    setSubmitted(true);
-    setFormData({ name: '', email: '', message: '' });
-    
-    // Reset submission status after 3 seconds
-    setTimeout(() => setSubmitted(false), 3000);
+    setError('');
+    emailjs.sendForm(
+      'service_sq5dqco',      // Replace with your EmailJS service ID
+      'template_t28v72g',     // Replace with your EmailJS template ID
+      formRef.current,
+      'n9mYsZ8HCut94yhAC'       // Replace with your EmailJS public key
+    )
+    .then(() => {
+      setSubmitted(true);
+      setFormData({ name: '', email: '', message: '' });
+      setTimeout(() => setSubmitted(false), 3000);
+    }, (err) => {
+      setError('Failed to send message. Please try again.');
+       console.error('EmailJS error:', err);
+    });
   };
 
   return (
@@ -38,7 +49,7 @@ const ContactPage = () => {
         </p>
         
         <div className="contact-content">
-          <form onSubmit={handleSubmit} className="contact-form">
+          <form ref={formRef} onSubmit={handleSubmit} className="contact-form">
             <div className="form-group">
               <label htmlFor="name">Name</label>
               <input
@@ -84,21 +95,26 @@ const ContactPage = () => {
                 Thank you for your message! We'll be in touch soon.
               </div>
             )}
+            {error && (
+              <div className="error-message">
+                {error}
+              </div>
+            )}
           </form>
           
           <div className="contact-info">
             <h2>Other Ways to Reach Us</h2>
             <div className="info-item">
               <i className="fas fa-envelope"></i>
-              <span>contact@example.com</span>
+              <span>priyankalavate@gmail.com</span>
             </div>
             <div className="info-item">
               <i className="fas fa-phone"></i>
-              <span>+1 (555) 123-4567</span>
+              <span>+91 7559493556</span>
             </div>
             <div className="info-item">
               <i className="fas fa-map-marker-alt"></i>
-              <span>123 Main Street, City, Country</span>
+              <span>Pandharpur</span>
             </div>
             
             <div className="social-links">
