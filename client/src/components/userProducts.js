@@ -270,7 +270,7 @@ const UserProducts = () => {
   // Mock navigation functions
   const handleAddProduct = () => {
     console.log('Navigate to add product page');
-    alert('Navigate to add product form');
+    Navigate('/add-product');
   };
 
   const handleEditProduct = (productId) => {

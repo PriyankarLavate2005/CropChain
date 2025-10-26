@@ -11,6 +11,7 @@ import Logout from '../pages/Logout.js';
 import SignUp from '../pages/Signup.js';
 import Navbar from '../components/Navbar';
 import CropInfo from '../CropInfo/CropInfo.js';
+import ProductUpload from '../pages/ProductUpload.js';
 import Login from '../pages/Login.js';
 import PrivateCompenents from '../components/Privatecomponent.js';
 import Products from '../pages/Products.js';
@@ -18,7 +19,7 @@ import  UserProducts from '../components/userProducts'
 import UserProfile from '../pages/UserProfile.js';
 import Settings from '../pages/Settings.js';
 import ContactPage from '../pages/Contact';
-import UserUploadedProducts from '../pages/userUploadedProducts.js';
+//import UserUploadedProducts from '../pages/userUploadedProducts.js';
 import Cart from '../components/Cart.js';
 
 import CartPage from '../components/CartPage.js';
@@ -35,7 +36,7 @@ const AppRoutes = () => {
           <Route path="/userprofile" element={<UserProfile />} />
           <Route path="/userproducts" element={<UserProducts/>}/>
           <Route path="settings" element={<Settings />} />
-          <Route path="/userUploadedProducts" element={<UserUploadedProducts/>}/>
+          <Route path="/userUploadedProducts" element={<ProductUpload/>}/>
           <Route path="/forcast" element={<Forecast/>} />
           <Route path="/cart" element={<CartPage/>} />
         </Route>
