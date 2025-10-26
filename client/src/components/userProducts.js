@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './userproducts.css';
 
-const  UserProducts = () => {
+const UserProducts = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,37 +11,163 @@ const  UserProducts = () => {
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [stockFilter, setStockFilter] = useState('all');
   const [sortBy, setSortBy] = useState('newest');
-
   const navigate = useNavigate();
-  const API_BASE_URL = 'http://localhost:5000/api';
-  const token = localStorage.getItem('token');
 
-  // Fetch user's products
+  // Mock data with Google Images URLs
+  const mockProducts = [
+    {
+      _id: '1',
+      name: 'Organic Apples',
+      description: 'Fresh organic apples from local farm, rich in fiber and vitamins',
+      price: '₹120 per kg',
+      category: 'Fruits',
+      stock: 25,
+      image: 'https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=400&h=300&fit=crop',
+      isOrganic: true,
+      createdAt: '2024-01-15T10:30:00Z'
+    },
+    {
+      _id: '2',
+      name: 'Fresh Carrots',
+      description: 'Sweet and crunchy carrots, perfect for salads and cooking',
+      price: '₹40 per kg',
+      category: 'Vegetables',
+      stock: 0,
+      image: 'https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=400&h=300&fit=crop',
+      isOrganic: false,
+      createdAt: '2024-01-10T14:20:00Z'
+    },
+    {
+      _id: '3',
+      name: 'Basmati Rice',
+      description: 'Premium quality basmati rice with long grains and aromatic flavor',
+      price: '₹80 per kg',
+      category: 'Grains',
+      stock: 15,
+      image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400&h=300&fit=crop',
+      isOrganic: true,
+      createdAt: '2024-01-20T09:15:00Z'
+    },
+    {
+      _id: '4',
+      name: 'Fresh Milk',
+      description: 'Pure cow milk, pasteurized and rich in calcium',
+      price: '₹60 per liter',
+      category: 'Dairy',
+      stock: 8,
+      image: 'https://images.unsplash.com/photo-1563636619-e9143da7973b?w=400&h=300&fit=crop',
+      isOrganic: false,
+      createdAt: '2024-01-18T16:45:00Z'
+    },
+    {
+      _id: '5',
+      name: 'Ripe Bananas',
+      description: 'Sweet and nutritious bananas, great for energy and digestion',
+      price: '₹50 per dozen',
+      category: 'Fruits',
+      stock: 30,
+      image: 'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=400&h=300&fit=crop',
+      isOrganic: true,
+      createdAt: '2024-01-22T11:00:00Z'
+    },
+    {
+      _id: '6',
+      name: 'Tomatoes',
+      description: 'Fresh red tomatoes, perfect for cooking and salads',
+      price: '₹30 per kg',
+      category: 'Vegetables',
+      stock: 45,
+      image: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=400&h=300&fit=crop',
+      isOrganic: true,
+      createdAt: '2024-01-25T08:20:00Z'
+    },
+    {
+      _id: '7',
+      name: 'Whole Wheat Bread',
+      description: 'Healthy whole wheat bread, freshly baked daily',
+      price: '₹35 per packet',
+      category: 'Bakery',
+      stock: 12,
+      image: 'https://images.unsplash.com/photo-1549931319-a545dcf3bc73?w=400&h=300&fit=crop',
+      isOrganic: false,
+      createdAt: '2024-01-24T07:30:00Z'
+    },
+    {
+      _id: '8',
+      name: 'Organic Eggs',
+      description: 'Farm fresh organic eggs from free-range chickens',
+      price: '₹90 per dozen',
+      category: 'Poultry',
+      stock: 20,
+      image: 'https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=400&h=300&fit=crop',
+      isOrganic: true,
+      createdAt: '2024-01-23T12:15:00Z'
+    },
+    {
+      _id: '9',
+      name: 'Spinach',
+      description: 'Fresh green spinach leaves, rich in iron and vitamins',
+      price: '₹25 per bunch',
+      category: 'Vegetables',
+      stock: 18,
+      image: 'https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=400&h=300&fit=crop',
+      isOrganic: true,
+      createdAt: '2024-01-21T15:40:00Z'
+    },
+    {
+      _id: '10',
+      name: 'Orange Juice',
+      description: '100% pure orange juice without any added sugar',
+      price: '₹120 per liter',
+      category: 'Beverages',
+      stock: 0,
+      image: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?w=400&h=300&fit=crop',
+      isOrganic: false,
+      createdAt: '2024-01-19T13:25:00Z'
+    },
+    {
+      _id: '11',
+      name: 'Almonds',
+      description: 'Premium California almonds, rich in protein and healthy fats',
+      price: '₹600 per kg',
+      category: 'Nuts',
+      stock: 22,
+      image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400&h=300&fit=crop',
+      isOrganic: true,
+      createdAt: '2024-01-17T11:50:00Z'
+    },
+    {
+      _id: '12',
+      name: 'Greek Yogurt',
+      description: 'Creamy Greek yogurt with high protein content',
+      price: '₹150 per 500g',
+      category: 'Dairy',
+      stock: 14,
+      image: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=400&h=300&fit=crop',
+      isOrganic: false,
+      createdAt: '2024-01-16T09:35:00Z'
+    }
+  ];
+
+  // Mock fetch function
   const fetchUserProducts = async () => {
     try {
       setLoading(true);
       setError('');
-         
-      const response = await fetch(`${API_BASE_URL}/products/my-products`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-      if (!response.ok) {
-        if (response.status === 401) {
-          navigate('/login');
-          throw new Error('Please login to view your products');
-        }
-        throw new Error('Failed to fetch products');
+      
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Simulate random error for testing (10% chance)
+      if (Math.random() < 0.1) {
+        throw new Error('Network error: Failed to load products');
       }
-
-      const result = await response.json();
-      setProducts(result.data || []);
-      setFilteredProducts(result.data || []);
+      
+      setProducts(mockProducts);
+      setFilteredProducts(mockProducts);
     } catch (err) {
       console.error('Error fetching products:', err);
-      setError(err.message || 'Failed to load products');
+      setError(err.message || 'Failed to load products. Please check your connection.');
     } finally {
       setLoading(false);
     }
@@ -116,23 +242,19 @@ const  UserProducts = () => {
   // Get unique categories for filter dropdown
   const categories = ['all', ...new Set(products.map(product => product.category).filter(Boolean))];
 
-  // Handle product deletion
+  // Mock delete function
   const handleDeleteProduct = async (productId) => {
     if (!window.confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
       return;
     }
 
     try {
-      const response = await fetch(`${API_BASE_URL}/products/${productId}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to delete product');
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      // Simulate random error for testing (20% chance)
+      if (Math.random() < 0.2) {
+        throw new Error('Server error: Failed to delete product');
       }
 
       // Remove the product from the local state
@@ -145,6 +267,27 @@ const  UserProducts = () => {
     }
   };
 
+  // Mock navigation functions
+  const handleAddProduct = () => {
+    console.log('Navigate to add product page');
+    alert('Navigate to add product form');
+  };
+
+  const handleEditProduct = (productId) => {
+    console.log(`Navigate to edit product: ${productId}`);
+    alert(`Navigate to edit product: ${productId}`);
+  };
+
+  const handleViewProduct = (productId) => {
+    console.log(`Navigate to view product: ${productId}`);
+    alert(`Navigate to view product: ${productId}`);
+  };
+
+  // Handle image error
+  const handleImageError = (e) => {
+    e.target.src = 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=300&fit=crop';
+  };
+
   useEffect(() => {
     fetchUserProducts();
   }, []);
@@ -154,6 +297,7 @@ const  UserProducts = () => {
       <div className="loading-container">
         <div className="loading-spinner"></div>
         <p>Loading your products...</p>
+        <p className="loading-subtext">This may take a few seconds</p>
       </div>
     );
   }
@@ -161,6 +305,7 @@ const  UserProducts = () => {
   if (error) {
     return (
       <div className="error-container">
+        <div className="error-icon">⚠️</div>
         <div className="error-message">{error}</div>
         <button onClick={fetchUserProducts} className="retry-btn">
           Try Again
@@ -175,7 +320,7 @@ const  UserProducts = () => {
         <h1>My Uploaded Products</h1>
         <button 
           className="primary-btn"
-          onClick={() => navigate('/add-product')}
+          onClick={handleAddProduct}
         >
           + Add New Product
         </button>
@@ -186,7 +331,7 @@ const  UserProducts = () => {
         <div className="search-box">
           <input
             type="text"
-            placeholder="Search products..."
+            placeholder="Search products by name or description..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -234,6 +379,7 @@ const  UserProducts = () => {
         <div className="summary-stats">
           <span>Total Value: {formatINR(products.reduce((sum, product) => sum + (extractPriceValue(product.price) * (product.stock || 0)), 0))}</span>
           <span>In Stock: {products.filter(p => p.stock > 0).length} products</span>
+          <span>Organic: {products.filter(p => p.isOrganic).length} products</span>
         </div>
       </div>
 
@@ -246,7 +392,7 @@ const  UserProducts = () => {
           {products.length === 0 && (
             <button 
               className="primary-btn"
-              onClick={() => navigate('/add-product')}
+              onClick={handleAddProduct}
             >
               Add Your First Product
             </button>
@@ -258,11 +404,9 @@ const  UserProducts = () => {
             <div key={product._id} className="product-card">
               <div className="product-image-container">
                 <img 
-                  src={product.image ? `${API_BASE_URL}/uploads/${product.image}` : '/placeholder-image.jpg'} 
+                  src={product.image} 
                   alt={product.name}
-                  onError={(e) => {
-                    e.target.src = '/placeholder-image.jpg';
-                  }}
+                  onError={handleImageError}
                 />
                 <div className="product-badges">
                   {product.isOrganic && <span className="organic-badge">🌱 Organic</span>}
@@ -274,7 +418,7 @@ const  UserProducts = () => {
               
               <div className="product-details">
                 <h3>{product.name}</h3>
-                <p className="product-price">{formatINR(extractPriceValue(product.price))}</p>
+                <p className="product-price">{product.price}</p>
                 <p className="product-category">{product.category}</p>
                 
                 {product.description && (
@@ -282,19 +426,19 @@ const  UserProducts = () => {
                 )}
                 
                 <p className="product-date">
-                  Added: {new Date(product.createdAt).toLocaleDateString()}
+                  Added: {new Date(product.createdAt).toLocaleDateString('en-IN')}
                 </p>
                 
                 <div className="product-actions">
                   <button 
                     className="edit-btn"
-                    onClick={() => navigate(`/edit-product/${product._id}`)}
+                    onClick={() => handleEditProduct(product._id)}
                   >
                     Edit
                   </button>
                   <button 
                     className="view-btn"
-                    onClick={() => navigate(`/product/${product._id}`)}
+                    onClick={() => handleViewProduct(product._id)}
                   >
                     View
                   </button>

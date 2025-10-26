@@ -616,7 +616,7 @@ const handleDeleteProduct = async (productId) => {
         className="primary-btn"
         onClick={() => navigate('/userproducts')}
       >
-        <span className="btn-icon">+</span> view Products
+        <span className="btn-icon"></span> view Products
       </button>
     </div>    
     {products.length === 0 ? (
@@ -626,8 +626,7 @@ const handleDeleteProduct = async (productId) => {
         <p>You haven't added any products to your farm.</p>
         <button
           className="primary-btn"
-          onClick={() => navigate('/userUploadedProducts')}
-        >
+          onClick={() => navigate('/userUploadedProducts')}>
           Add Your First Product
         </button>
       </div>
@@ -674,7 +673,7 @@ const handleDeleteProduct = async (productId) => {
                   </span>
                 )}
               </div>
-              
+                  
               <div className="product-actions">
                 <button
                   className="edit-btn"
