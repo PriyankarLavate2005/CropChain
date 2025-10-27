@@ -11,7 +11,7 @@ const UserProducts = () => {
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [stockFilter, setStockFilter] = useState('all');
   const [sortBy, setSortBy] = useState('newest');
-  const navigate = useNavigate();
+  const Navigate = useNavigate();
 
   // Mock data with Google Images URLs
   const mockProducts = [
@@ -270,7 +270,7 @@ const UserProducts = () => {
   // Mock navigation functions
   const handleAddProduct = () => {
     console.log('Navigate to add product page');
-    Navigate('/add-product');
+    Navigate('/userUploadedProducts');
   };
 
   const handleEditProduct = (productId) => {

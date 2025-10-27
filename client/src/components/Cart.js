@@ -584,7 +584,7 @@ const Cart = ({ cartItems, onRemoveItem, onUpdateQuantity, onClose, totalPrice }
               {cartItems.map(item => (
                 <div key={item._id} style={checkoutStyles.orderItem}>
                   <span>{item.name} × {item.quantity || 1}</span>
-                  <span>{formatINR(extractPriceValue(item.price) * (item.quantity || 1))}</span>
+                  <span>{formatINR(extractPriceValue(item.price) * (item.quantity || 1 ))}</span>
                 </div>
               ))}
               <div style={{ ...checkoutStyles.orderItem, borderBottom: 'none', fontWeight: '700', fontSize: '1.2rem' }}>
@@ -725,7 +725,7 @@ const Cart = ({ cartItems, onRemoveItem, onUpdateQuantity, onClose, totalPrice }
             <div style={styles.summary}>
               <div style={styles.summaryRow}>
                 <span>Subtotal:</span>
-                <span>{formatINR(totalPrice || 0)}</span>
+                <span>{formatINR(totalPrice)}</span>
               </div>
               <div style={styles.summaryRow}>
                 <span>Shipping:</span>
@@ -733,7 +733,7 @@ const Cart = ({ cartItems, onRemoveItem, onUpdateQuantity, onClose, totalPrice }
               </div>
               <div style={{...styles.summaryRow, ...styles.totalRow}}>
                 <span>Total:</span>
-                <span>{formatINR(totalPrice || 0)}</span>
+                <span>{formatINR(totalPrice)}</span>
               </div>
               
               <button 
