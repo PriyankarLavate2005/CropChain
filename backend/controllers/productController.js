@@ -107,7 +107,6 @@ exports.deleteProduct = async (req, res) => {
     });
   }
 };
-
 exports.getProducts = async (req, res) => {
   try {
     const products = await Product.find().populate('user', 'name username');

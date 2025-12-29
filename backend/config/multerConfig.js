@@ -39,10 +39,15 @@ const fileFilter = (req, file, cb) => {
 // Initialize Multer
 const upload = multer({
   storage,
-  limits: { fileSize: 15 * 1024 * 1024 }, // 5MB limit
+  limits: { fileSize: 15 * 1024 * 1024 }, // 15MB limit (fixed the comment)
   fileFilter
 });
-
+// Add this to your multerConfig.js or a separate initialization script
+const avatarDir = 'uploads/avatars/';
+if (!fs.existsSync(avatarDir)) {
+  console.log('Creating avatar upload directory:', avatarDir);
+  fs.mkdirSync(avatarDir, { recursive: true });
+}
 // Error handler
 const handleMulterErrors = (err, req, res, next) => {
   if (err) {
@@ -51,7 +56,7 @@ const handleMulterErrors = (err, req, res, next) => {
     
     if (err instanceof multer.MulterError) {
       if (err.code === 'LIMIT_FILE_SIZE') {
-        message = 'File too large (max 5MB)';
+        message = 'File too large (max 15MB)';
       } else if (err.code === 'LIMIT_UNEXPECTED_FILE') {
         message = 'Unexpected file field';
       }
@@ -65,4 +70,5 @@ const handleMulterErrors = (err, req, res, next) => {
   next();
 };
 
-module.exports = { upload, handleMulterErrors };
+// Export the upload instance directly for use in routes
+module.exports = upload;

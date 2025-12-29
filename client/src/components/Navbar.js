@@ -71,7 +71,7 @@ const Navbar = () => {
       <div className="navbar-logo">
         <Link to="/" aria-label="Home">
           <span className="logo-icon">🌱</span>
-          <span className="logo-text">AgroGuide</span>
+          <span className="logo-text">CropChain</span>
         </Link>
       </div>
 

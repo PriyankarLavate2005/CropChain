@@ -1,8 +1,9 @@
+
 const express = require('express');
 const router = express.Router();
 const uploadMiddleware = require('../middleware/uploadMiddleware');
 const Product = require('../models/Product');
-
+const authMiddleware = require('../middleware/authMiddleware');
 // Upload product
 router.post('/upload', uploadMiddleware.single('image'), async (req, res) => {
   try {
@@ -12,9 +13,7 @@ router.post('/upload', uploadMiddleware.single('image'), async (req, res) => {
         message: 'Please upload an image file'
       });
     }
-
     const { name, price, category, description, stock } = req.body;
-
     if (!name || !price || !category) {
       return res.status(400).json({ 
         success: false,
@@ -63,7 +62,6 @@ router.post('/upload', uploadMiddleware.single('image'), async (req, res) => {
     });
   }
 });
-
 // Get all products
 router.get('/', async (req, res) => {
   try {
@@ -73,6 +71,28 @@ router.get('/', async (req, res) => {
     res.status(500).json({ 
       success: false,
       message: 'Server error: ' + err.message 
+    });
+  }
+});
+router.get('/my-products', authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    if (userId){
+      console.log(userId)
+    }
+    const products = await Product.find({ user: userId })
+      .sort({ createdAt: -1 });
+    res.status(200).json({
+      success: true,
+      message: 'Products retrieved successfully',
+      data: products
+    });
+  } catch (error) {
+    console.error('Error fetching user products:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch products',
+      error: error.message
     });
   }
 });

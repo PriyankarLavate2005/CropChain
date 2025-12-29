@@ -126,26 +126,7 @@ const About = () => {
         </div>
       </section>
 
-      {/* Team Section */}
-      <section className="team-section">
-        <h2>Meet Our Team</h2>
-        <p className="section-intro">
-          Passionate experts combining agriculture and technology
-        </p>
-        <div className="team-grid">
-          {teamMembers.map(member => (
-            <div className="team-card" key={member.id}>
-              <div className="team-image-container">
-                <img src={member.image} alt={member.name} className="team-image" />
-                <div className="image-overlay"></div>
-              </div>
-              <h3>{member.name}</h3>
-              <p className="team-role">{member.role}</p>
-              <p className="team-bio">{member.bio}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+    
 
       {/* CTA Section */}
       <section className="cta-section">
