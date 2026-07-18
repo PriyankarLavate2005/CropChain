@@ -53,7 +53,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
 // Import images
-import farmerImage from '../Assets/farmer.jpg'; // Add this new image import
+import farmerImage from '../Assets/farmers.jpg'; // Fixed: was farmer.jpg
 import vegiImage from '../Assets/vegi.jpg';
 import vegi2Image from '../Assets/vegi2.jpg';
 import vegi3Image from '../Assets/vegi3.jpg';
